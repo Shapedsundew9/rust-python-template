@@ -25,10 +25,6 @@
             "installTools": false
         }
     },
-    "containerEnv": {
-        "GITHUB_TOKEN": "${localEnv:COPILOT_GITHUB_TOKEN}",
-        "GEMINI_API_KEY": "${localEnv:FREE_GEMINI_API_KEY}"
-    },
     "customizations": {
         "vscode": {
             "extensions": [
