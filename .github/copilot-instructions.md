@@ -32,3 +32,8 @@
 - Run `.venv/bin/python -m unittest discover -s python/tests -v`
   for Python changes.
 - Validate only the services and language surfaces affected by an experiment.
+
+## Diagramming
+
+- Use Mermaid for diagrams in Markdown files.
+- Convert any textual diagrams to Mermaid for consistency and maintainability.
