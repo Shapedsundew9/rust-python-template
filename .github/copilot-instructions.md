@@ -33,7 +33,6 @@
 - Run `.venv/bin/python -m unittest discover -s python/tests -v`
   for Python changes.
 - Validate only the services and language surfaces affected by an experiment.
-- If authentication testing is not needed use `cargo test -- --skip configured_authentication` to avoid waiting for intentional timeouts. Saves about 40s per test run. 
 
 ## Diagramming
 
