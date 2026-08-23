@@ -1,12 +1,12 @@
 # Rust & Python Agentic Engineering Template
 
-> A production-grade template and multi-agent orchestration framework for specification-driven systems development in Rust and Python.
+> A template and multi-agent orchestration framework for specification-driven systems development in Rust and Python.
 
 ---
 
 ## 🌟 Overview
 
-This repository is a **starter template** designed for teams and engineers building high-assurance software systems using AI-assisted, specification-first workflows. It combines a dual-language runtime environment (**Rust** for high-performance, memory-safe core logic; **Python** for rapid tooling, analysis, and data scripts) with a suite of specialized **GitHub Copilot / Antigravity Agent Orchestrators**.
+This repository is a **starter template** designed for teams and engineers building software systems using AI-assisted, specification-first workflows. It combines a dual-language runtime environment (**Rust** for high-performance, memory-safe core logic; **Python** for rapid tooling, analysis, and data scripts) with a suite of specialized **GitHub Copilot / Antigravity Agent Orchestrators**.
 
 Instead of prompting an LLM to generate unstructured code on the fly, this template implements a disciplined **Orchestrator-Subagent Lifecycle**:
 1. **Spec-Orchestrator** drives human-in-the-loop progressive refinement from user intent and business invariants to concrete logical contracts and technology realization profiles.
@@ -198,6 +198,8 @@ sequenceDiagram
 ---
 
 ## 🤖 Agent Catalog (`.github/agents/`)
+
+Many of the agents here are taken and adapted from the excellent collection at [`awesome-copilot/agents`](https://github.com/github/awesome-copilot/tree/main/agents)
 
 | Agent File | Role / Mode | Purpose & Focus Areas |
 |:---|:---|:---|
