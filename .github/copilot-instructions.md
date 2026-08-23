@@ -47,8 +47,6 @@
 - OSS brings supply chain and security risk. Only use it if there is a significant benefit over implementing the functionality in-house.
 - Only use well-known, widely adopted, consistently maintained packages that have a permissive license to reduce maintenance burden.
 
-<<<<<<< HEAD
-=======
 ## Documentation Structure
 
 - `docs/requirements/` — Formal requirements in r9ts Markdown interchange format (one requirement per file). Optional subfolders: `product/`, `architecture/`, `implementation/`, `resource/`, `performance/`.
