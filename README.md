@@ -197,26 +197,29 @@ sequenceDiagram
 
 ---
 
-## 🤖 Agent Catalog (`.github/agents/`)
+## 🤖 Agent & Skills Catalog
 
-Many of the agents here are taken and adapted from the excellent collection at [`awesome-copilot/agents`](https://github.com/github/awesome-copilot/tree/main/agents)
+The agent definitions are available in three complementary formats:
+1. **Antigravity Custom Agents & Subagents** (`.agents/agents/`): Defined with `subagent: true` (and `mainAgent: true` for top-level orchestrators), enabling isolated context delegation via `invoke_subagent` and management in the `/agents` panel.
+2. **Antigravity Skills** (`.agents/skills/`): On-demand procedures and interactive slash commands (`/<skill-name>`).
+3. **GitHub Copilot Agents** (`.github/agents/`): Adapted from the collection at [`awesome-copilot/agents`](https://github.com/github/awesome-copilot/tree/main/agents).
 
-| Agent File | Role / Mode | Purpose & Focus Areas |
-|:---|:---|:---|
-| [`spec-orchestrator.agent.md`](.github/agents/spec-orchestrator.agent.md) | **Orchestrator** | Requirements engineering director; human-in-the-loop multi-tier spec decomposition and gating. |
-| [`rug-orchestrator.agent.md`](.github/agents/rug-orchestrator.agent.md) | **Orchestrator** | Pure execution orchestrator; decomposes tasks, delegates to subagents, validates, and iterates ("Repeat Until Good"). |
-| [`prd.agent.md`](.github/agents/prd.agent.md) | Product Management | Authors structured PRDs (`docs/product/`) and extracts Tier 0 functional requirements. |
-| [`se-product-manager-advisor.agent.md`](.github/agents/se-product-manager-advisor.agent.md) | Product Advisor | Hypotheses validation, Jobs-to-be-Done alignment, and GitHub issue breakdown with business context. |
-| [`se-ux-ui-designer.agent.md`](.github/agents/se-ux-ui-designer.agent.md) | UX Research & Design | JTBD analysis, user journey mapping (`docs/ux/`), flow specifications, and accessibility checklists. |
-| [`se-system-architecture-reviewer.agent.md`](.github/agents/se-system-architecture-reviewer.agent.md) | Architecture Review | Well-Architected framework validation (reliability, scalability, AI systems, data pipelines). |
-| [`adr-generator.agent.md`](.github/agents/adr-generator.agent.md) | Architecture Decision | Trade study analysis and standardized ADR generation (`docs/architecture/adr-NNNN-*`). |
-| [`api-architect.agent.md`](.github/agents/api-architect.agent.md) | API & Contracts | REST/gRPC service interfaces, resilience patterns (circuit breakers, rate limiting, bulkheads). |
-| [`specification.agent.md`](.github/agents/specification.agent.md) | Requirements Authoring | Dual-mode authoring of formal r9ts requirements (`docs/requirements/`) and freeform architecture docs. |
-| [`se-security-reviewer.agent.md`](.github/agents/se-security-reviewer.agent.md) | Security Review | OWASP Top 10, OWASP LLM Top 10, Zero Trust enforcement, cryptographic hygiene, and code review reports. |
-| [`swe-subagent.agent.md`](.github/agents/swe-subagent.agent.md) | Implementation (SWE) | Senior full-stack engineer producing clean, idiomatic, test-backed diffs in Rust and Python. |
-| [`rust-mcp-expert.agent.md`](.github/agents/rust-mcp-expert.agent.md) | MCP & Async Rust | Specialized in Model Context Protocol (MCP) servers using the official Rust `rmcp` SDK and Tokio. |
-| [`qa-subagent.agent.md`](.github/agents/qa-subagent.agent.md) | Quality Assurance | Adversarial test planning, boundary/concurrency testing, and independent verification of acceptance criteria. |
-| [`debug.agent.md`](.github/agents/debug.agent.md) | Systematic Debugging | 4-phase structured debugging: Problem assessment, reproduction, root-cause investigation, and fix verification. |
+| Antigravity Subagent | Skill / Command | Copilot Agent File | Role / Mode | Purpose & Focus Areas |
+|:---|:---|:---|:---|:---|
+| [`spec-orchestrator.md`](.agents/agents/spec-orchestrator.md) | `/spec-orchestrator` | [`spec-orchestrator.agent.md`](.github/agents/spec-orchestrator.agent.md) | **Orchestrator** | Requirements engineering director; human-in-the-loop multi-tier spec decomposition and gating. |
+| [`rug-orchestrator.md`](.agents/agents/rug-orchestrator.md) | `/rug-orchestrator` | [`rug-orchestrator.agent.md`](.github/agents/rug-orchestrator.agent.md) | **Orchestrator** | Pure execution orchestrator; decomposes tasks, delegates to subagents, validates, and iterates ("Repeat Until Good"). |
+| [`prd.md`](.agents/agents/prd.md) | `/create-prd` | [`prd.agent.md`](.github/agents/prd.agent.md) | Product Management | Authors structured PRDs (`docs/product/`) and extracts Tier 0 functional requirements. |
+| [`se-product-manager.md`](.agents/agents/se-product-manager.md) | `/se-product-manager` | [`se-product-manager-advisor.agent.md`](.github/agents/se-product-manager-advisor.agent.md) | Product Advisor | Hypotheses validation, Jobs-to-be-Done alignment, and GitHub issue breakdown with business context. |
+| [`se-ux-designer.md`](.agents/agents/se-ux-designer.md) | `/se-ux-designer` | [`se-ux-ui-designer.agent.md`](.github/agents/se-ux-ui-designer.agent.md) | UX Research & Design | JTBD analysis, user journey mapping (`docs/ux/`), flow specifications, and accessibility checklists. |
+| [`se-architect.md`](.agents/agents/se-architect.md) | `/se-architect` | [`se-system-architecture-reviewer.agent.md`](.github/agents/se-system-architecture-reviewer.agent.md) | Architecture Review | Well-Architected framework validation (reliability, scalability, AI systems, data pipelines). |
+| [`adr-generator.md`](.agents/agents/adr-generator.md) | `/adr-generator` | [`adr-generator.agent.md`](.github/agents/adr-generator.agent.md) | Architecture Decision | Trade study analysis and standardized ADR generation (`docs/architecture/adr-NNNN-*`). |
+| [`api-architect.md`](.agents/agents/api-architect.md) | `/api-architect` | [`api-architect.agent.md`](.github/agents/api-architect.agent.md) | API & Contracts | REST/gRPC service interfaces, resilience patterns (circuit breakers, rate limiting, bulkheads). |
+| [`specification.md`](.agents/agents/specification.md) | `/specification` | [`specification.agent.md`](.github/agents/specification.agent.md) | Requirements Authoring | Dual-mode authoring of formal r9ts requirements (`docs/requirements/`) and freeform architecture docs. |
+| [`se-security.md`](.agents/agents/se-security.md) | `/se-security` | [`se-security-reviewer.agent.md`](.github/agents/se-security-reviewer.agent.md) | Security Review | OWASP Top 10, OWASP LLM Top 10, Zero Trust enforcement, cryptographic hygiene, and code review reports. |
+| [`swe.md`](.agents/agents/swe.md) | `/swe` | [`swe-subagent.agent.md`](.github/agents/swe-subagent.agent.md) | Implementation (SWE) | Senior full-stack engineer producing clean, idiomatic, test-backed diffs in Rust and Python. |
+| [`rust-mcp-expert.md`](.agents/agents/rust-mcp-expert.md) | `/rust-mcp-expert` | [`rust-mcp-expert.agent.md`](.github/agents/rust-mcp-expert.agent.md) | MCP & Async Rust | Specialized in Model Context Protocol (MCP) servers using the official Rust `rmcp` SDK and Tokio. |
+| [`qa.md`](.agents/agents/qa.md) | `/qa` | [`qa-subagent.agent.md`](.github/agents/qa-subagent.agent.md) | Quality Assurance | Adversarial test planning, boundary/concurrency testing, and independent verification of acceptance criteria. |
+| [`debug.md`](.agents/agents/debug.md) | `/debug` | [`debug.agent.md`](.github/agents/debug.agent.md) | Systematic Debugging | 4-phase structured debugging: Problem assessment, reproduction, root-cause investigation, and fix verification. |
 
 ---
 
@@ -268,12 +271,15 @@ Unit tests verify that attempting to transition directly from Draft to Verified 
 
 ```text
 .
+├── .agents/                   # Antigravity agent customizations
+│   ├── agents/                # Custom subagents (subagent: true, invoke_subagent)
+│   └── skills/                # Modular skills & slash commands (/<skill-name>)
 ├── .devcontainer/             # Devcontainer configuration (Rust, Python, Docker services)
 │   ├── devcontainer.json
 │   ├── docker-compose.yml     # PostgreSQL and Neo4j development services
 │   └── Dockerfile
 ├── .github/
-│   ├── agents/                # Orchestrators and specialist subagent definitions
+│   ├── agents/                # GitHub Copilot agent definitions
 │   │   ├── spec-orchestrator.agent.md
 │   │   ├── rug-orchestrator.agent.md
 │   │   └── ... (specialist subagents)
