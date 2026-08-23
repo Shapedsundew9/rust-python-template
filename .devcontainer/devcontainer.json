@@ -10,6 +10,17 @@
         "app"
     ],
     "workspaceFolder": "/workspace",
+    "remoteEnv": {
+        "GITHUB_TOKEN": "${localEnv:COPILOT_GITHUB_TOKEN}",
+        "GEMINI_API_KEY": "${localEnv:GEMINI_API_KEY}",
+        "ARC_AGI_API": "${localEnv:ARC_AGI_API}",
+        "DATABASE_URL": "${localEnv:DATABASE_URL}",
+        "NEO4J_URI": "${localEnv:NEO4J_URI}",
+        "NEO4J_USERNAME": "${localEnv:NEO4J_USERNAME}",
+        "NEO4J_PASSWORD": "${localEnv:NEO4J_PASSWORD}",
+        "NEO4J_DATABASE": "${localEnv:NEO4J_DATABASE}",
+        "HF_READ_TOKEN": "${localEnv:HF_READ_TOKEN}"
+    },
     "postCreateCommand": "bash .devcontainer/post-create.sh",
     "remoteUser": "vscode",
     "features": {
