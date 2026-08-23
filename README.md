@@ -10,7 +10,7 @@ This repository is a **starter template** designed for teams and engineers build
 
 Instead of prompting an LLM to generate unstructured code on the fly, this template implements a disciplined **Orchestrator-Subagent Lifecycle**:
 1. **Spec-Orchestrator** drives human-in-the-loop progressive refinement from user intent and business invariants to concrete logical contracts and technology realization profiles.
-2. **RUG ("Repeat Until Good") Orchestrator** decomposes specifications into discrete tasks, delegates code generation to focused software engineering subagents, runs independent validation subagents, and iterates until all verification criteria pass.
+2. [**RUG ("Repeat Until Good") Orchestrator**](https://github.com/github/awesome-copilot/blob/main/agents/rug-orchestrator.agent.md) decomposes specifications into discrete tasks, delegates code generation to focused software engineering subagents, runs independent validation subagents, and iterates until all verification criteria pass.
 
 ```mermaid
 %%{init: {
