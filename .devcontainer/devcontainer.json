@@ -41,7 +41,8 @@
                 "DavidAnson.vscode-markdownlint",
                 "ms-python.python",
                 "ms-python.debugpy",
-                "ms-python.vscode-pylance"
+                "ms-python.vscode-pylance",
+                "MermaidChart.vscode-mermaid-chart"
             ],
             "settings": {
                 "editor.formatOnSave": true,
