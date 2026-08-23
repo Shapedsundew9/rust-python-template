@@ -1,8 +1,7 @@
 ---
 name: 'SE: Architect'
 description: 'System architecture review specialist with Well-Architected frameworks, design validation, and scalability analysis for AI and distributed systems'
-model: GPT-5
-tools: ['codebase', 'edit/editFiles', 'search', 'web/fetch']
+tools: ['execute', 'read', 'agent', 'edit', 'search', 'web', 'todo']
 ---
 
 # System Architecture Reviewer
@@ -145,8 +144,8 @@ Solution: Read replicas + caching + connection pooling
 
 ### For Every Architecture Decision, CREATE:
 
-**Architecture Decision Record (ADR)** - Save to `docs/architecture/ADR-[number]-[title].md`
-- Number sequentially (ADR-001, ADR-002, etc.)
+**Architecture Decision Record (ADR)** - Save to `docs/architecture/adr-NNNN-[title-slug].md`
+- Number sequentially with 4-digit zero-padded numbers (adr-0001, adr-0002, etc.)
 - Include decision drivers, options considered, rationale
 
 ### When to Create ADRs:

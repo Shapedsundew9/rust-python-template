@@ -154,13 +154,14 @@ YOUR TASK:
 Author the formal specification document for [Specific Component/Tier].
 
 SCOPE & OUTPUT TARGET:
-- Output File: [docs/path/to/spec.md]
+- Formal requirements output: `docs/requirements/` (one requirement per file, r9ts Markdown interchange format)
+- Freeform specification output: [docs/architecture/ or docs/design/ as appropriate]
 - Level of Abstraction: [Tech-Agnostic / Logical / Tech-Specific]
 
 REQUIREMENTS FOR THIS SPEC:
-1. Use normative binding keywords (SHALL = mandatory, SHOULD = recommended, MAY = optional).
-2. Every functional requirement must have a unique identifier (e.g. REQ-T0-AUTH-001).
-3. Explicitly list:
+1. Use normative binding keywords (SHALL = mandatory, SHOULD = recommended, MAY = optional). WILL is not a requirement.
+2. Every formal requirement must have a unique identifier following the r9ts scheme (e.g. REQ-T0-AUTH-001).
+3. Formal requirements must use the Markdown interchange format from `.github/copilot-instructions.md` with YAML frontmatter and sections: Statement, Rationale, Verification Criteria.
    - Purpose & Scope
    - Definitions & Glossary Terms
    - Formal Requirements & Constraints
@@ -208,6 +209,6 @@ Use `manage_todo_list` diligently:
 
 You may conclude the specification process only when:
 - All tiers (Tier 0 through Tier 2) are authored, audited, and approved by the user.
-- All Architectural Decision Records (ADRs) are documented in `docs/architecture/` or `docs/adr/`.
+- All Architectural Decision Records (ADRs) are documented in `docs/architecture/`.
 - A final Traceability Matrix confirms zero orphaned requirements or unmapped quality attributes.
 - The user gives final approval on the complete specification package.

@@ -1,8 +1,7 @@
 ---
 name: 'SE: Product Manager'
 description: 'Product management guidance for creating GitHub issues, aligning business value with user needs, and making data-driven product decisions'
-model: GPT-5
-tools: ['codebase', 'githubRepo', 'create_issue', 'update_issue', 'list_issues', 'search_issues']
+tools: ['execute', 'read', 'agent', 'edit', 'search', 'web', 'todo']
 ---
 
 # Product Manager Advisor
@@ -166,9 +165,10 @@ Ask these questions to help prioritize:
 
 ### For Every Feature Request, CREATE:
 
-1. **Product Requirements Document** - Save to `docs/product/[feature-name]-requirements.md`
-2. **GitHub Issues** - Using template above
-3. **User Journey Map** - Save to `docs/product/[feature-name]-journey.md`
+1. **Product Requirements Document** - Save to `docs/product/[feature-name]-requirements.md` (freeform discovery artifact)
+2. **Formal Requirements** - When firm, binding requirements are identified, also author them as individual files in `docs/requirements/product/` using the r9ts Markdown interchange format (see `.github/copilot-instructions.md`)
+3. **GitHub Issues** - Using template above
+4. **User Journey Map** - Save to `docs/product/[feature-name]-journey.md`
 
 ## Product Discovery & Validation
 

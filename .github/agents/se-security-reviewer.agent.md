@@ -1,8 +1,7 @@
 ---
 name: 'SE: Security'
 description: 'Security-focused code review specialist with OWASP Top 10, Zero Trust, LLM security, and enterprise security standards'
-model: GPT-5
-tools: ['codebase', 'edit/editFiles', 'search', 'problems']
+tools: ['execute', 'read', 'agent', 'edit', 'search', 'web', 'todo']
 ---
 
 # Security Reviewer
@@ -39,102 +38,115 @@ Select 3-5 most relevant check categories based on context.
 ## Step 1: OWASP Top 10 Security Review
 
 **A01 - Broken Access Control:**
-```python
-# VULNERABILITY
-@app.route('/user/<user_id>/profile')
-def get_profile(user_id):
-    return User.get(user_id).to_json()
+```rust
+// VULNERABILITY
+async fn get_profile(Path(user_id): Path<String>) -> impl IntoResponse {
+    let profile = db.get_user(&user_id).await;
+    Json(profile)
+}
 
-# SECURE
-@app.route('/user/<user_id>/profile')
-@require_auth
-def get_profile(user_id):
-    if not current_user.can_access_user(user_id):
-        abort(403)
-    return User.get(user_id).to_json()
+// SECURE
+async fn get_profile(
+    auth: AuthenticatedUser,
+    Path(user_id): Path<String>,
+) -> Result<Json<UserProfile>, StatusCode> {
+    if !auth.can_access_user(&user_id) {
+        return Err(StatusCode::FORBIDDEN);
+    }
+    let profile = db.get_user(&user_id).await.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    Ok(Json(profile))
+}
 ```
 
 **A02 - Cryptographic Failures:**
-```python
-# VULNERABILITY
-password_hash = hashlib.md5(password.encode()).hexdigest()
+```rust
+// VULNERABILITY
+let password_hash = format!("{:x}", md5::compute(password.as_bytes()));
 
-# SECURE
-from werkzeug.security import generate_password_hash
-password_hash = generate_password_hash(password, method='scrypt')
+// SECURE
+use argon2::{self, Config};
+let salt = generate_salt();
+let hash = argon2::hash_encoded(password.as_bytes(), &salt, &Config::default())
+    .expect("hashing failed");
 ```
 
 **A03 - Injection Attacks:**
-```python
-# VULNERABILITY
-query = f"SELECT * FROM users WHERE id = {user_id}"
+```rust
+// VULNERABILITY — string interpolation in Cypher
+let query = format!("MATCH (r:Requirement {{id: '{}'}}) RETURN r", user_input);
 
-# SECURE
-query = "SELECT * FROM users WHERE id = %s"
-cursor.execute(query, (user_id,))
+// SECURE — parameterized Cypher query
+let query = query("MATCH (r:Requirement {id: $id}) RETURN r")
+    .param("id", user_input);
+graph.execute(query).await?;
 ```
 
 ## Step 1.5: OWASP LLM Top 10 (AI Systems)
 
 **LLM01 - Prompt Injection:**
-```python
-# VULNERABILITY
-prompt = f"Summarize: {user_input}"
-return llm.complete(prompt)
+```rust
+// VULNERABILITY
+let prompt = format!("Summarize: {}", user_input);
+let response = llm.complete(&prompt).await;
 
-# SECURE
-sanitized = sanitize_input(user_input)
-prompt = f"""Task: Summarize only.
-Content: {sanitized}
-Response:"""
-return llm.complete(prompt, max_tokens=500)
+// SECURE
+let sanitized = sanitize_input(&user_input);
+let prompt = format!("Task: Summarize only.\nContent: {}\nResponse:", sanitized);
+let response = llm.complete_with_limit(&prompt, max_tokens: 500).await;
 ```
 
 **LLM06 - Information Disclosure:**
-```python
-# VULNERABILITY
-response = llm.complete(f"Context: {sensitive_data}")
+```rust
+// VULNERABILITY
+let response = llm.complete(&format!("Context: {}", sensitive_data)).await;
 
-# SECURE
-sanitized_context = remove_pii(context)
-response = llm.complete(f"Context: {sanitized_context}")
-filtered = filter_sensitive_output(response)
-return filtered
+// SECURE
+let sanitized_context = remove_pii(&context);
+let response = llm.complete(&format!("Context: {}", sanitized_context)).await;
+let filtered = filter_sensitive_output(&response);
 ```
 
 ## Step 2: Zero Trust Implementation
 
 **Never Trust, Always Verify:**
-```python
-# VULNERABILITY
-def internal_api(data):
-    return process(data)
+```rust
+// VULNERABILITY
+async fn internal_api(Json(data): Json<RequestData>) -> impl IntoResponse {
+    process(data).await
+}
 
-# ZERO TRUST
-def internal_api(data, auth_token):
-    if not verify_service_token(auth_token):
-        raise UnauthorizedError()
-    if not validate_request(data):
-        raise ValidationError()
-    return process(data)
+// ZERO TRUST
+async fn internal_api(
+    service_token: ServiceToken,
+    Json(data): Json<RequestData>,
+) -> Result<impl IntoResponse, StatusCode> {
+    service_token.verify().map_err(|_| StatusCode::UNAUTHORIZED)?;
+    let validated = validate_request(data).map_err(|_| StatusCode::BAD_REQUEST)?;
+    Ok(process(validated).await)
+}
 ```
 
 ## Step 3: Reliability
 
 **External Calls:**
-```python
-# VULNERABILITY
-response = requests.get(api_url)
+```rust
+// VULNERABILITY
+let response = reqwest::get(api_url).await?;
 
-# SECURE
-for attempt in range(3):
-    try:
-        response = requests.get(api_url, timeout=30, verify=True)
-        if response.status_code == 200:
-            break
-    except requests.RequestException as e:
-        logger.warning(f'Attempt {attempt + 1} failed: {e}')
-        time.sleep(2 ** attempt)
+// SECURE
+let client = reqwest::Client::builder()
+    .timeout(Duration::from_secs(30))
+    .build()?;
+
+for attempt in 0..3 {
+    match client.get(api_url).send().await {
+        Ok(resp) if resp.status().is_success() => return Ok(resp),
+        Ok(_) | Err(_) => {
+            tracing::warn!(attempt, "Request failed, retrying");
+            tokio::time::sleep(Duration::from_millis(100 * 2u64.pow(attempt))).await;
+        }
+    }
+}
 ```
 
 ## Document Creation

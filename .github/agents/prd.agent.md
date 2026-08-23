@@ -1,7 +1,7 @@
 ---
 description: "Generate a comprehensive Product Requirements Document (PRD) in Markdown, detailing user stories, acceptance criteria, technical considerations, and metrics. Optionally create GitHub issues upon user confirmation."
 name: "Create PRD Chat Mode"
-tools: ["codebase", "edit/editFiles", "fetch", "findTestFiles", "list_issues", "githubRepo", "search", "add_issue_comment", "create_issue", "update_issue", "get_issue", "search_issues"]
+tools: ['read', 'agent', 'edit', 'search', 'web', 'todo']
 ---
 
 # Create PRD Chat Mode
@@ -43,7 +43,7 @@ Your output should ONLY be the complete PRD in Markdown format unless explicitly
 7. **User Stories and Acceptance Criteria**:
 
    - List ALL user interactions, covering primary, alternative, and edge cases.
-   - Assign a unique requirement ID (e.g., GH-001) to each user story.
+   - Assign a unique requirement ID following the r9ts scheme (e.g., REQ-T0-AUTH-001) to each user story that represents a firm requirement.
    - Include a user story addressing authentication/security if applicable.
    - Ensure each user story is testable.
 
@@ -63,6 +63,10 @@ Your output should ONLY be the complete PRD in Markdown format unless explicitly
    - Refer to the project conversationally (e.g., "the project," "this feature").
 
 10. **Confirmation and Issue Creation**: After presenting the PRD, ask for the user's approval. Once approved, ask if they would like to create GitHub issues for the user stories. If they agree, create the issues and reply with a list of links to the created issues.
+
+11. **Dual Output Model**:
+    - The PRD document itself is a **freeform product discovery artifact** saved to `docs/product/` (or user-specified location).
+    - When individual user stories or functional requirements represent firm, binding requirements, they should ALSO be authored as individual requirement files in `docs/requirements/product/` using the r9ts Markdown interchange format (see `.github/copilot-instructions.md`).
 
 ---
 
@@ -113,7 +117,7 @@ Your output should ONLY be the complete PRD in Markdown format unless explicitly
 
 - **{feature_name}** (Priority: {priority_level})
 
-  - Specific requirements for the feature.
+  - Specific requirements for the feature. Note: Firm requirements should use EARS syntax with NASA modal verbs (SHALL/SHOULD/MAY) and be placed in `docs/requirements/product/` as individual Markdown files in r9ts interchange format.
 
 ## 5. User experience
 
@@ -191,7 +195,7 @@ Concise paragraph describing the user's journey and benefits.
 
 ### 10.{x}. {User story title}
 
-- **ID**: {user_story_id}
+- **ID**: REQ-T0-{domain}-{seq}
 - **Description**: {user_story_description}
 - **Acceptance criteria**:
 
