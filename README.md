@@ -304,7 +304,7 @@ Unit tests verify that attempting to transition directly from Draft to Verified 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- **Devcontainer / VS Code / Cursor** (recommended): Open in the provided devcontainer which comes pre-configured with Rust (1.85+ / 2024 edition), Python 3.11+, Cargo tools, and `.venv`.
+- **Devcontainer / VS Code / Cursor** (recommended): Open in the provided devcontainer which comes pre-configured with Rust (1.98+ / 2024 edition), Python 3.11+, Cargo tools, and `.venv`.
 - **Local Toolchains**:
   - Rust: `rustup default stable` (or see `rust-toolchain.toml`)
   - Python: `python3 -m venv .venv && .venv/bin/pip install -e python/`
