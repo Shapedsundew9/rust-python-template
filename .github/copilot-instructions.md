@@ -132,4 +132,3 @@ allocated_to: [COMP-xxx]
 Body sections: `## Statement`, `## Rationale`, `## Verification Criteria`.
 
 See `docs/design/requirement-model.md` for the full specification and examples. See `docs/glossary.md` for defined terms including `RequirementRevision`, `MissionObjective`, `SystemElement`, `InterfaceContract`, `TechnologyProfile`, `ChangeSet`, `AuditEvent`, `Baseline`, and `SemanticView`.
->>>>>>> c49e176 (Generalized agents and change their semantic to be consistent with r9ts)
