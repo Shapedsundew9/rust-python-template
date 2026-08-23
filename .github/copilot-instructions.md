@@ -37,3 +37,11 @@
 
 - Use Mermaid for diagrams in Markdown files.
 - Convert any textual diagrams to Mermaid for consistency and maintainability.
+- Follow the style in `docs/templates/mermaid-style-guide.md` for Mermaid diagrams.
+
+## 3rd Party Packages
+
+- Minimize the number of 3rd party packages used in the project.
+- OSS brings supply chain and security risk. Only use it if there is a significant benefit over implementing the functionality in-house.
+- Only use well-known, widely adopted, consistently maintained packages that have a permissive license to reduce maintenance burden.
+
