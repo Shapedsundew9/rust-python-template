@@ -11,7 +11,7 @@ This theme uses Mermaid's `base` theme engine configured specifically for dark b
 ### Color Palette Reference
 
 | Role | Name | Fill Hex | Border Hex | Text Hex | Recommended Semantic Usage |
-|:---|:---|:---|:---|:---|:---|
+| :--- | :--- | :--- | :--- | :--- | :--- |
 | **Canvas** | Dark Canvas | `#161922` | `#33394a` | `#e2e8f0` | Diagram canvas background and base contrast layer |
 | **Default Node** | Dark Slate | `#1e2230` | `#434c5e` | `#e2e8f0` | Standard components, general pipeline steps, neutral entities |
 | **Primary** | Gentle Red (Rosewood) | `#422026` | `#e06c75` | `#fde8ec` | **Core Domain & Invariants**, critical logic, state roots, entry points, mutation boundaries |
@@ -409,7 +409,7 @@ When specializing this template for your project:
 Define which parts of your codebase correspond to the three primary roles:
 
 | Palette Class | What to map in your project | Examples |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | `primary` (Gentle Red) | The critical core that must remain invariant | `src/core`, domain models, state machines, validation rules |
 | `secondary` (Gentle Green) | The active business logic and services | `src/services`, background workers, CLI commands, web handlers |
 | `tertiary` (Gentle Blue) | External boundary adapters and storage | SQL/NoSQL drivers, REST/gRPC clients, file I/O, cloud SDKs |
@@ -418,6 +418,7 @@ Define which parts of your codebase correspond to the three primary roles:
 ### Step 2: Organize Documentation Diagrams
 
 Recommended locations for project diagrams:
+
 - **System Architecture**: `docs/architecture/overview.md` (high-level system overview)
 - **Architecture Decision Records**: `docs/adr/ADR-XXXX.md` (context, proposed design, state transitions)
 - **Data Model Specifications**: `docs/models/` or `docs/schema/` (class and entity relationship diagrams)
@@ -426,6 +427,7 @@ Recommended locations for project diagrams:
 ### Step 3: Palette Customization (Optional)
 
 If your organization uses a specific brand accent (e.g. teal or purple), you can adjust `themeVariables` in the `%%{init: ...}%%` block:
+
 - Keep dark background colors (`#161922`, `#1e2230`, `#13161f`) to maintain dark theme compatibility.
 - Ensure any replacement text/border colors maintain high contrast against `#1e2230` (minimum 4.5:1 ratio for normal text).
 

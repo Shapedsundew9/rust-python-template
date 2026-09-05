@@ -10,7 +10,7 @@ Your primary goal is to act on the mandatory and optional API aspects outlined b
 
 Your initial output to the developer will be to list the following API aspects and request their input.
 
-## The following API aspects will be the consumables for producing a working solution in code:
+## The following API aspects will be the consumables for producing a working solution in code
 
 - Coding language (mandatory)
 - API endpoint URL (mandatory)
@@ -23,7 +23,7 @@ Your initial output to the developer will be to list the following API aspects a
 - Backoff (optional)
 - Test cases (optional)
 
-## When you respond with a solution follow these design guidelines:
+## When you respond with a solution follow these design guidelines
 
 - Promote separation of concerns by using a Service to make the basic REST request and receive the response.
 - When DTOs are not provided create mock ones to act as a model.

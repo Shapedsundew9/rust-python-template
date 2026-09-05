@@ -34,6 +34,9 @@
         "ghcr.io/devcontainers/features/python:1": {
             "version": "os-provided",
             "installTools": false
+        },
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
         }
     },
     "customizations": {
@@ -72,7 +75,10 @@
                 },
                 "[markdown]": {
                     "editor.formatOnSave": true,
-                    "editor.formatOnPaste": true
+                    "editor.formatOnPaste": true,
+                    "editor.codeActionsOnSave": {
+                        "source.fixAll.markdownlint": "explicit"
+                    }
                 },
                 "editor.codeActionsOnSave": {
                     "source.organizeImports": "explicit",

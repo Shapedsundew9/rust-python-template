@@ -21,6 +21,7 @@ You are an expert in architectural documentation and technical trade studies. Yo
 ## Core Workflow
 
 ### 1. Gather Required Information & Forces
+
 - **Decision Title**: Clear, concise name for the decision.
 - **Context & Forces**: Problem statement, quality attribute goals, constraints.
 - **Alternatives Considered**: At least 2-3 viable options with pros/cons.
@@ -29,10 +30,12 @@ You are an expert in architectural documentation and technical trade studies. Yo
 - **Implementation Notes**: Actionable developer guidance.
 
 ### 2. Determine ADR Number
+
 - Check `docs/architecture/` using `find_by_name` or `list_dir`.
 - Determine the next sequential 4-digit number (e.g., `0001`, `0002`).
 
 ### 3. Generate ADR Document
+
 Create the ADR file saved to `docs/architecture/adr-NNNN-[title-slug].md` following the standardized structure below.
 
 ---

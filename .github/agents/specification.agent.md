@@ -12,8 +12,8 @@ This agent operates in two modes when creating or updating specification documen
 
 Use this mode for hard, explicit requirements.
 
-*   Output one requirement per file in `docs/requirements/` (with optional subfolders: `product/`, `architecture/`, `implementation/`, `resource/`, `performance/`).
-*   Use the r9ts Markdown interchange format with YAML frontmatter:
+* Output one requirement per file in `docs/requirements/` (with optional subfolders: `product/`, `architecture/`, `implementation/`, `resource/`, `performance/`).
+* Use the r9ts Markdown interchange format with YAML frontmatter:
 
 ```yaml
 ---
@@ -32,22 +32,22 @@ allocated_to: [COMP-xxx]
 ---
 ```
 
-*   **Body sections:** `## Statement`, `## Rationale`, `## Verification Criteria`
-*   **Syntax:** Use EARS syntax patterns (Ubiquitous, Event-driven, State-driven, Optional, Unwanted).
-*   **Modal Verbs:** Use NASA modal verbs: SHALL (mandatory), SHOULD (goal), MAY (discretionary). WILL is NOT a requirement.
-*   **Quality Rules:** Atomic (one subject, one predicate), Quantified, Unambiguous, Correct tier abstraction.
-*   **Prohibited Terms:** user-friendly, flexible, adequate, maximize, minimize, fast, easy, simple, efficient, robust, seamless, intuitive, etc., and/or.
-*   Reference `docs/design/requirement-model.md` for full specification.
-*   Reference `docs/glossary.md` for defined terms.
+* **Body sections:** `## Statement`, `## Rationale`, `## Verification Criteria`
+* **Syntax:** Use EARS syntax patterns (Ubiquitous, Event-driven, State-driven, Optional, Unwanted).
+* **Modal Verbs:** Use NASA modal verbs: SHALL (mandatory), SHOULD (goal), MAY (discretionary). WILL is NOT a requirement.
+* **Quality Rules:** Atomic (one subject, one predicate), Quantified, Unambiguous, Correct tier abstraction.
+* **Prohibited Terms:** user-friendly, flexible, adequate, maximize, minimize, fast, easy, simple, efficient, robust, seamless, intuitive, etc., and/or.
+* Reference `docs/design/requirement-model.md` for full specification.
+* Reference `docs/glossary.md` for defined terms.
 
 ## Mode 2: Freeform Specification
 
 Use this mode for design docs, architecture overviews, and general specifications.
 
-*   Output to `docs/architecture/` or `docs/design/` as appropriate.
-*   Use well-formed Markdown with clear, unambiguous language.
-*   Define all acronyms and domain-specific terms.
-*   Include examples and edge cases.
+* Output to `docs/architecture/` or `docs/design/` as appropriate.
+* Use well-formed Markdown with clear, unambiguous language.
+* Define all acronyms and domain-specific terms.
+* Include examples and edge cases.
 
 ## Notes
 
@@ -55,6 +55,6 @@ Formal requirements use the interchange format from `.github/copilot-instruction
 
 ## Best Practices for AI-Ready Specifications
 
-*   **Precise language:** Avoid ambiguity and ensure terms are used consistently.
-*   **Structured formatting:** Use clear headings, lists, and defined sections.
-*   **Self-contained docs:** Documents should include all necessary context or explicitly link to it.
+* **Precise language:** Avoid ambiguity and ensure terms are used consistently.
+* **Structured formatting:** Use clear headings, lists, and defined sections.
+* **Self-contained docs:** Documents should include all necessary context or explicitly link to it.

@@ -114,27 +114,32 @@ For each tier in the requirements pipeline:
 ## Tier Definitions and Subagent Dispatch Mapping
 
 ### Tier 0: Domain Invariants & Product Goals (Tech-Agnostic)
+
 * **Goal**: Define business logic, state machines, user personas, and functional invariants. Invariant across programming languages or database choices.
 * **Authoring Subagents**: `Create PRD Chat Mode`, `SE: Product Manager`, `Specification`
 * **Syntax Standard**: EARS (*Easy Approach to Requirements Syntax*) using `SHALL` statements.
 * **Validation Subagent**: `QA`
 
 ### User Experience & Workflows
+
 * **Goal**: Jobs-to-be-Done (JTBD), user journey maps, CLI interaction flows, error feedback ergonomics, and accessibility requirements.
 * **Authoring Subagent**: `SE: UX Designer`
 * **Validation Subagent**: `QA`, `SE: Product Manager`
 
 ### Tier 1: Logical Architecture & Interface Contracts
+
 * **Goal**: Component boundaries, message protocols, data interchange schemas (OpenAPI, TypeSpec, JSON Schema, Protobuf), and Architectural Decision Records (ADRs).
 * **Authoring Subagents**: `SE: Architect`, `API Architect`, `ADR Generator`
 * **Validation Subagents**: `SE: Architect`, `SE: Security`
 
 ### Non-Functional Requirements (NFRs) & Security Invariants
+
 * **Goal**: Latency budgets, throughput, memory/VRAM ceilings, Zero Trust network boundaries, audit trails, and optimistic concurrency rules.
 * **Authoring Subagents**: `SE: Security`, `SE: Architect`
 * **Validation Subagents**: `SE: Security`, `QA`
 
 ### Tier 2: Technology Realization Profiles
+
 * **Goal**: Constraints and requirements induced solely by the selected tech stack (e.g., Rust 2024 edition, Tokio async runtime, Axum HTTP routes, Bolt protocol via `neo4rs`, GBNF grammars for local LLM inference).
 * **Authoring Subagents**: `SWE`, `Specification`
 * **Validation Subagents**: `SE: Architect`, `QA`
@@ -198,6 +203,7 @@ REPORT:
 ## Progress Tracking
 
 Use `manage_todo_list` diligently:
+
 1. Populate the full specification roadmap with all stages before dispatching subagents.
 2. Mark tasks in-progress as subagents run.
 3. Mark tasks complete **ONLY after user sign-off at the decision gate**.
@@ -208,7 +214,8 @@ Use `manage_todo_list` diligently:
 ## Termination Criteria
 
 You may conclude the specification process only when:
-- All tiers (Tier 0 through Tier 2) are authored, audited, and approved by the user.
-- All Architectural Decision Records (ADRs) are documented in `docs/architecture/`.
-- A final Traceability Matrix confirms zero orphaned requirements or unmapped quality attributes.
-- The user gives final approval on the complete specification package.
+
+* All tiers (Tier 0 through Tier 2) are authored, audited, and approved by the user.
+* All Architectural Decision Records (ADRs) are documented in `docs/architecture/`.
+* A final Traceability Matrix confirms zero orphaned requirements or unmapped quality attributes.
+* The user gives final approval on the complete specification package.

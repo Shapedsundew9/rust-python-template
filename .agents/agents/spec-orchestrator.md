@@ -107,27 +107,32 @@ For each tier in the requirements pipeline:
 ## Tier Definitions and Subagent Dispatch Mapping
 
 ### Tier 0: Domain Invariants & Product Goals (Tech-Agnostic)
+
 * **Goal**: Define business logic, state machines, user personas, and functional invariants. Invariant across programming languages or database choices.
 * **Authoring Subagents**: `prd`, `se-product-manager`, `specification`
 * **Syntax Standard**: EARS (*Easy Approach to Requirements Syntax*) using `SHALL` statements.
 * **Validation Subagent**: `qa`
 
 ### User Experience & Workflows
+
 * **Goal**: Jobs-to-be-Done (JTBD), user journey maps, CLI interaction flows, error feedback ergonomics, and accessibility requirements.
 * **Authoring Subagent**: `se-ux-designer`
 * **Validation Subagents**: `qa`, `se-product-manager`
 
 ### Tier 1: Logical Architecture & Interface Contracts
+
 * **Goal**: Component boundaries, message protocols, data interchange schemas (OpenAPI, TypeSpec, JSON Schema, Protobuf), and Architectural Decision Records (ADRs).
 * **Authoring Subagents**: `se-architect`, `api-architect`, `adr-generator`
 * **Validation Subagents**: `se-architect`, `se-security`
 
 ### Non-Functional Requirements (NFRs) & Security Invariants
+
 * **Goal**: Latency budgets, throughput, memory/VRAM ceilings, Zero Trust network boundaries, audit trails, and optimistic concurrency rules.
 * **Authoring Subagents**: `se-security`, `se-architect`
 * **Validation Subagents**: `se-security`, `qa`
 
 ### Tier 2: Technology Realization Profiles
+
 * **Goal**: Constraints and requirements induced solely by the selected tech stack (e.g., Rust 2024 edition, Tokio async runtime, Axum HTTP routes, Bolt protocol via `neo4rs`, Python `tools` package).
 * **Authoring Subagents**: `swe`, `specification`, `rust-mcp-expert`
 * **Validation Subagents**: `se-architect`, `qa`
@@ -186,7 +191,8 @@ REPORT:
 ## Termination Criteria
 
 You may conclude the specification process only when:
-- All tiers (Tier 0 through Tier 2) are authored, audited, and approved by the user.
-- All Architectural Decision Records (ADRs) are documented in `docs/architecture/`.
-- A final Traceability Matrix confirms zero orphaned requirements or unmapped quality attributes.
-- The user gives final approval on the complete specification package.
+
+* All tiers (Tier 0 through Tier 2) are authored, audited, and approved by the user.
+* All Architectural Decision Records (ADRs) are documented in `docs/architecture/`.
+* A final Traceability Matrix confirms zero orphaned requirements or unmapped quality attributes.
+* The user gives final approval on the complete specification package.

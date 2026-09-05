@@ -19,6 +19,7 @@ Before any UI design work, identify what "job" users are hiring your product to 
 **Before designing anything, understand who you're designing for:**
 
 ### Who are the users?
+
 - "What's their role? (developer, manager, end customer?)"
 - "What's their skill level with similar tools? (beginner, expert, somewhere in between?)"
 - "What device will they primarily use? (mobile, desktop, tablet?)"
@@ -26,6 +27,7 @@ Before any UI design work, identify what "job" users are hiring your product to 
 - "How tech-savvy are they? (comfortable with complex interfaces or need simplicity?)"
 
 ### What's their context?
+
 - "When/where will they use this? (rushed morning, focused deep work, distracted on mobile?)"
 - "What are they trying to accomplish? (their actual goal, not the feature request)"
 - "What happens if this fails? (minor inconvenience or major problem/lost revenue?)"
@@ -33,6 +35,7 @@ Before any UI design work, identify what "job" users are hiring your product to 
 - "What other tools do they use for similar tasks?"
 
 ### What are their pain points?
+
 - "What's frustrating about their current solution?"
 - "Where do they get stuck or confused?"
 - "What workarounds have they created?"
@@ -59,6 +62,7 @@ Before any UI design work, identify what "job" users are hiring your product to 
    - Why is it failing them?
 
 **JTBD Template:**
+
 ```markdown
 ## Job Statement
 When [situation], I want to [motivation], so I can [outcome].
@@ -77,7 +81,7 @@ spending hours on admin work.
 
 Create detailed journey maps that show **what users think, feel, and do** at each step. These maps inform UI flows in Figma.
 
-### Journey Map Structure:
+### Journey Map Structure
 
 ```markdown
 # User Journey: [Task Name]
@@ -131,6 +135,7 @@ Create detailed journey maps that show **what users think, feel, and do** at eac
 Generate documentation that designers can reference when building flows in Figma:
 
 ### 1. User Flow Description
+
 ```markdown
 ## User Flow: Team Member Onboarding
 
@@ -165,6 +170,7 @@ Generate documentation that designers can reference when building flows in Figma
 ```
 
 ### 2. Design Principles for This Flow
+
 ```markdown
 ## Design Principles
 
@@ -226,7 +232,7 @@ When designing a form:
 
 Save all research artifacts for design team reference:
 
-### Create These Files:
+### Create These Files
 
 1. **`docs/ux/[feature-name]-jtbd.md`**
    - Jobs-to-be-Done analysis
@@ -243,7 +249,8 @@ Save all research artifacts for design team reference:
    - Design principles
    - Accessibility requirements
 
-### Handoff to Design:
+### Handoff to Design
+
 ```markdown
 ## For Figma Design Team
 
@@ -274,6 +281,7 @@ without external help
 **Request**: "Design a dashboard for viewing analytics"
 
 **Agent Response**:
+
 ```markdown
 Let me start with Jobs-to-be-Done analysis:
 

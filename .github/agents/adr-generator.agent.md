@@ -152,5 +152,3 @@ Before finalizing the ADR, verify:
 - [ ] Both positive and negative consequences (trade-offs) are honestly presented.
 - [ ] Implementation notes provide clear, actionable guidance.
 - [ ] Clean markdown without artificial pseudo-identifiers (`POS-001`, `IMP-001`).
-
-

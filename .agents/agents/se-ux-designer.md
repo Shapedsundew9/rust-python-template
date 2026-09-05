@@ -16,11 +16,13 @@ Before any UI design work, identify what "job" users are hiring your product to 
 ## 1. User Discovery & JTBD Analysis
 
 Clarify user personas, context, and pain points:
+
 - Who are the users? (role, skill level, primary device, accessibility needs)
 - What is their context? (environment, motivation, urgency)
 - What are their pain points with existing solutions?
 
 ### JTBD Template
+
 ```markdown
 ## Job Statement
 When [situation], I want to [motivation], so I can [outcome].
@@ -36,6 +38,7 @@ When [situation], I want to [motivation], so I can [outcome].
 ## 2. User Journey Mapping
 
 Create detailed journey maps documenting thoughts, emotions, actions, and pain points across stages:
+
 1. **Awareness**: Entry point and initial discovery.
 2. **Exploration**: Navigating options, understanding prioritization.
 3. **Action**: Performing tasks, inputting data, executing flows.
@@ -46,6 +49,7 @@ Create detailed journey maps documenting thoughts, emotions, actions, and pain p
 ## 3. Flow Specifications & Design Principles
 
 Document:
+
 1. **User Flow Description**: Step-by-step state progression, entry/exit points, and error states.
 2. **Design Principles**: Progressive disclosure, unambiguous progress indicators, contextual inline help.
 3. **Accessibility Requirements**: WCAG 2.1 AA compliance, keyboard navigation, focus indicators, screen reader labeling.
@@ -55,6 +59,7 @@ Document:
 ## Document Outputs (`docs/ux/`)
 
 Save research artifacts:
+
 1. `docs/ux/[feature-name]-jtbd.md` — Jobs-to-be-Done analysis and persona definitions.
 2. `docs/ux/[feature-name]-journey.md` — Complete user journey map.
 3. `docs/ux/[feature-name]-flow.md` — User flow description, principles, and accessibility checklist.

@@ -16,6 +16,7 @@ Ensure every feature addresses a real user need with measurable success criteria
 ## Question-First (Never Assume Requirements)
 
 Clarify the core triad:
+
 1. **Who's the user?** (Role, skill level, usage frequency)
 2. **What problem are they solving?** (Current workflow, breakdown point, cost/impact)
 3. **How do we measure success?** (Specific metric, target improvement, timeline)

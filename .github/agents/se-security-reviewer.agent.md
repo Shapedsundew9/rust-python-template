@@ -32,12 +32,14 @@ Review code for security vulnerabilities with focus on OWASP Top 10, Zero Trust 
    - Security sensitive → Deep security review
    - Rapid prototype → Critical security only
 
-### Create Review Plan:
+### Create Review Plan
+
 Select 3-5 most relevant check categories based on context.
 
 ## Step 1: OWASP Top 10 Security Review
 
 **A01 - Broken Access Control:**
+
 ```rust
 // VULNERABILITY
 async fn get_profile(Path(user_id): Path<String>) -> impl IntoResponse {
@@ -59,6 +61,7 @@ async fn get_profile(
 ```
 
 **A02 - Cryptographic Failures:**
+
 ```rust
 // VULNERABILITY
 let password_hash = format!("{:x}", md5::compute(password.as_bytes()));
@@ -71,6 +74,7 @@ let hash = argon2::hash_encoded(password.as_bytes(), &salt, &Config::default())
 ```
 
 **A03 - Injection Attacks:**
+
 ```rust
 // VULNERABILITY — string interpolation in Cypher
 let query = format!("MATCH (r:Requirement {{id: '{}'}}) RETURN r", user_input);
@@ -84,6 +88,7 @@ graph.execute(query).await?;
 ## Step 1.5: OWASP LLM Top 10 (AI Systems)
 
 **LLM01 - Prompt Injection:**
+
 ```rust
 // VULNERABILITY
 let prompt = format!("Summarize: {}", user_input);
@@ -96,6 +101,7 @@ let response = llm.complete_with_limit(&prompt, max_tokens: 500).await;
 ```
 
 **LLM06 - Information Disclosure:**
+
 ```rust
 // VULNERABILITY
 let response = llm.complete(&format!("Context: {}", sensitive_data)).await;
@@ -109,6 +115,7 @@ let filtered = filter_sensitive_output(&response);
 ## Step 2: Zero Trust Implementation
 
 **Never Trust, Always Verify:**
+
 ```rust
 // VULNERABILITY
 async fn internal_api(Json(data): Json<RequestData>) -> impl IntoResponse {
@@ -129,6 +136,7 @@ async fn internal_api(
 ## Step 3: Reliability
 
 **External Calls:**
+
 ```rust
 // VULNERABILITY
 let response = reqwest::get(api_url).await?;
@@ -151,13 +159,16 @@ for attempt in 0..3 {
 
 ## Document Creation
 
-### After Every Review, CREATE:
+### After Every Review, CREATE
+
 **Code Review Report** - Save to `docs/code-review/[date]-[component]-review.md`
+
 - Include specific code examples and fixes
 - Tag priority levels
 - Document security findings
 
-### Report Format:
+### Report Format
+
 ```markdown
 # Code Review: [Component]
 **Ready for Production**: [Yes/No]

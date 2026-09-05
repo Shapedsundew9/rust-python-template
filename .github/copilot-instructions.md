@@ -32,6 +32,12 @@
 - Run `cargo fmt --check`, `cargo clippy`, and `cargo test` for Rust changes.
 - Run `.venv/bin/python -m unittest discover -s python/tests -v`
   for Python changes.
+- After creating or editing Markdown, run `markdownlint-cli2 --fix "**/*.md"`,
+  inspect the resulting diff, and then run `markdownlint-cli2 "**/*.md"`.
+- Use the Markdownlint Fix All action from the Problems panel when working
+  interactively. The shared policy is defined in `.markdownlint-cli2.jsonc`.
+- Keep intentional Markdown exceptions narrow and document them with a
+  targeted configuration or inline suppression.
 - Validate only the services and language surfaces affected by an experiment.
 
 ## Diagramming
