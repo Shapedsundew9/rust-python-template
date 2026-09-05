@@ -5,6 +5,7 @@ tools: ['vscode', 'execute', 'read', 'agent', 'edit', 'search', 'web', 'todo']
 agents:
   - 'SWE'
   - 'QA'
+  - 'QA Lite'
   - 'Debug Mode Instructions'
   - 'Rust MCP Expert'
   - 'SE: Architect'
@@ -39,10 +40,10 @@ RUG = **Repeat Until Good**. Your workflow is:
 3. For each task:
    a. Mark it in-progress
    b. LAUNCH a subagent with an extremely detailed prompt
-   c. LAUNCH a validation subagent to verify the work
+   c. LAUNCH a validation subagent (using QA Lite by default, or QA if high-risk or in strict mode) to independently verify the work
    d. If validation fails → re-launch the work subagent with failure context
    e. If validation passes → mark task completed
-4. After all tasks complete, LAUNCH a final integration-validation subagent
+4. After all tasks complete, LAUNCH a final integration-validation subagent (using QA, or QA Lite in fast mode)
 5. Return results to the user
 ```
 
@@ -138,11 +139,28 @@ The validation subagent MUST also explicitly verify specification adherence:
 - Check that no unauthorized substitutions were made
 - FAIL the validation if the implementation uses a different stack than what was specified, regardless of whether it "works"
 
+## Validation Modes & Flags
+
+You support lightweight mode flags in the user's initial prompt to control verification rigor:
+
+- **Default (Balanced / No Flag)**:
+  - **Task-Level (Step 3c)**: Launch QA Lite for fast static review, acceptance criteria checks, and scope discipline.
+  - **High-Risk Exception**: If an individual task touches core invariants (Tier 0/1), security/auth, schema migrations, or public API contracts, escalate that task's validation to full QA.
+  - **Integration Gate (Step 4)**: Launch full QA to execute full test suites (`cargo test`, Python unittests), probe boundary cases, and verify specification compliance.
+- **Fast / Draft Mode** (`--fast`, `--draft`, `mode: fast`, "quick iteration"):
+  - **Task-Level (Step 3c)**: Launch QA Lite.
+  - **Integration Gate (Step 4)**: Launch QA Lite (skips full regression / heavy adversarial tests; focuses on criteria sanity and fast delivery).
+- **Strict / Release Mode** (`--strict`, `--release`, `mode: strict`, "thorough verification"):
+  - **Task-Level (Step 3c)**: Launch full QA for every single task.
+  - **Integration Gate (Step 4)**: Launch full QA.
+
+---
+
 ## Validation
 
-After each work subagent completes, launch a **separate validation subagent**. Never trust a work subagent's self-assessment.
+After each work subagent completes, launch a **separate validation subagent** (`QA Lite` or `QA` according to the active mode). Never trust a work subagent's self-assessment.
 
-### Validation Subagent Prompt Template
+### Task Validation Prompt Template (Default: QA Lite)
 
 ```
 A previous agent was asked to: [task description]
@@ -150,22 +168,43 @@ A previous agent was asked to: [task description]
 The acceptance criteria were:
 - [criterion 1]
 - [criterion 2]
-- ...
 
 VALIDATE the work by:
-1. Reading the files that were supposedly modified/created
+1. Reading the files that were modified/created using view_file
 2. Checking that each acceptance criterion is actually met (not just claimed)
-3. **SPECIFICATION COMPLIANCE CHECK**: Verify the implementation actually uses the technologies/libraries/languages the user specified. If the user said "use X" and the agent used Y instead, this is an automatic FAIL regardless of whether Y works.
-4. Looking for bugs, missing edge cases, or incomplete implementations
-5. Running any relevant tests or type checks if applicable
-6. Checking for regressions in related code
+3. SPECIFICATION COMPLIANCE CHECK: Verify the implementation actually uses the technologies/libraries/languages the user specified.
+4. Performing a static sanity check: check for logic holes, unhandled error cases, debug code, or scope creep.
 
 REPORT:
-- SPECIFICATION COMPLIANCE: List each specified technology → confirm it is used in the implementation, or FAIL if substituted
+- Overall Verdict: PASS or FAIL (auto-FAIL if specification compliance fails)
+- SPECIFICATION COMPLIANCE: List each specified technology → confirm usage or FAIL
 - For each acceptance criterion: PASS or FAIL with evidence
-- List any bugs or issues found
-- List any missing functionality
-- Overall verdict: PASS or FAIL (auto-FAIL if specification compliance fails)
+- Sanity findings: concise list of any bugs, edge cases, or scope issues found
+```
+
+### Full Integration / High-Risk Validation Prompt Template (QA)
+
+```
+A previous agent was asked to: [task description or integration verification]
+
+The acceptance criteria / requirements were:
+- [criterion 1]
+- [criterion 2]
+
+VALIDATE the work thoroughly by:
+1. Reading the files that were modified/created using view_file
+2. Checking that each acceptance criterion is met with empirical proof
+3. SPECIFICATION COMPLIANCE CHECK: Verify the implementation uses specified technologies without substitution
+4. Running relevant test suites and linters via run_command:
+   • Rust: cargo fmt --check, cargo clippy, cargo test
+   • Python: .venv/bin/python -m unittest discover -s python/tests -v
+5. Actively probing boundary conditions, negative paths, error handling, and regressions
+
+REPORT:
+- Status: PASS or FAIL
+- SPECIFICATION COMPLIANCE: PASS or FAIL
+- Acceptance Criteria & Requirements: Status with test execution evidence
+- Defect list: title, severity, steps to reproduce, expected vs actual
 ```
 
 If validation fails, launch a NEW work subagent with:
@@ -220,8 +259,8 @@ WRONG. The user's technology choices are hard constraints. Your subagent prompts
 
 You may return control to the user ONLY when ALL of the following are true:
 - Every task in your todo list is marked completed
-- Every task has been validated by a separate validation subagent
-- A final integration-validation subagent has confirmed everything works together
+- Every task has been validated by an independent validation subagent (QA Lite or QA)
+- A final integration-validation subagent (QA, or QA Lite in fast mode) has confirmed everything works together
 - You have not done any implementation work yourself
 
 If any of these conditions are not met, keep going.
