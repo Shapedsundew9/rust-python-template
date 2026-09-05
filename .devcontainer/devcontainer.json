@@ -19,7 +19,8 @@
         "NEO4J_USERNAME": "${localEnv:NEO4J_USERNAME}",
         "NEO4J_PASSWORD": "${localEnv:NEO4J_PASSWORD}",
         "NEO4J_DATABASE": "${localEnv:NEO4J_DATABASE}",
-        "HF_READ_TOKEN": "${localEnv:HF_READ_TOKEN}"
+        "HF_READ_TOKEN": "${localEnv:HF_READ_TOKEN}",
+        "ANTIGRAVITY_MIC": "${localEnv:ANTIGRAVITY_MIC}"
     },
     "postCreateCommand": "bash .devcontainer/post-create.sh",
     "remoteUser": "vscode",

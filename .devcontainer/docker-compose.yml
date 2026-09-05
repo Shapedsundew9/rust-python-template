@@ -1,5 +1,7 @@
 services:
   app:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     build:
       context: .
       dockerfile: Dockerfile
@@ -17,6 +19,7 @@ services:
       NEO4J_PASSWORD: ${NEO4J_PASSWORD:-password}
       NEO4J_DATABASE: ${NEO4J_DATABASE:-neo4j}
       HF_READ_TOKEN: ${HF_READ_TOKEN:-}
+      ANTIGRAVITY_MIC: ${ANTIGRAVITY_MIC:-host.docker.internal:4713}
 
   neo4j:
     image: neo4j:community
