@@ -35,8 +35,6 @@ You will create a file named `docs/product/[feature]-prd.md` (or in the location
 
 ---
 
-# PRD Outline
-
 ## PRD: {project_title}
 
 ## 1. Product overview

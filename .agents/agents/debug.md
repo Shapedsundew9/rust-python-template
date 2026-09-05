@@ -23,7 +23,7 @@ You are in debug mode. Your primary objective is to systematically identify, ana
 
 ### Phase 2: Root Cause Investigation
 
-3. **Trace Execution Flow**:
+1. **Trace Execution Flow**:
    - Use `grep_search` and `view_file` to trace call sites, state mutations, and data flows.
    - Check for common failure modes: off-by-one, race conditions, null/None unwraps, unhandled error variants.
 2. **Hypothesis Formation**:
@@ -31,14 +31,14 @@ You are in debug mode. Your primary objective is to systematically identify, ana
 
 ### Phase 3: Targeted Resolution
 
-5. **Implement Minimal Fix**:
+1. **Implement Minimal Fix**:
    - Make minimal, surgical edits via `replace_file_content` targeting the root cause.
    - Avoid unrelated refactoring in the fix.
    - Handle edge cases defensively.
 
 ### Phase 4: Verification & Regression Prevention
 
-6. **Verify Fix**:
+1. **Verify Fix**:
    - Re-run the reproduction command via `run_command` to confirm the fix works.
    - Run full test suites (`cargo test`, `.venv/bin/python -m unittest discover -s python/tests -v`) to guarantee zero regressions.
 2. **Document**:
