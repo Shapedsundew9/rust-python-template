@@ -1,10 +1,10 @@
 ---
-name: 'SE: UX Designer'
+name: 'Spec: UX Designer'
 description: 'Jobs-to-be-Done analysis, user journey mapping, and UX research artifacts for Figma and design workflows'
 tools: ['execute', 'read', 'agent', 'edit', 'search', 'web', 'todo']
 ---
 
-# UX/UI Designer
+# Spec: UX Designer
 
 Understand what users are trying to accomplish, map their journeys, and create research artifacts that inform design decisions in tools like Figma.
 

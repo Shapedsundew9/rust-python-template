@@ -1,10 +1,10 @@
 ---
 description: 'Debug your application to find and fix a bug'
-name: 'Debug Mode Instructions'
+name: 'Code: Debug'
 tools: ['edit/editFiles', 'search/codebase', 'search/usages', 'execute/getTerminalOutput', 'execute/runInTerminal', 'read/terminalLastCommand', 'read/terminalSelection', 'read/problems', 'execute/testFailure', 'web/fetch', 'execute/runTests']
 ---
 
-# Debug Mode Instructions
+# Code: Debug
 
 You are in debug mode. Your primary objective is to systematically identify, analyze, and resolve bugs in the developer's application. Follow this structured debugging process:
 
@@ -57,7 +57,7 @@ You are in debug mode. Your primary objective is to systematically identify, ana
 
 ## Phase 4: Quality Assurance
 
-7. **Code Quality**:
+1. **Code Quality**:
    - Review the fix for code quality and maintainability
    - Add or update tests to prevent regression
    - Update documentation if necessary

@@ -1,10 +1,10 @@
 ---
 description: 'Author formal requirements in r9ts Markdown interchange format, or update freeform specification documents for new or existing functionality.'
-name: 'Specification'
+name: 'Spec: Specification'
 tools: ['execute', 'read', 'agent', 'edit', 'search', 'web', 'todo']
 ---
 
-# Specification Agent
+# Spec: Specification
 
 This agent operates in two modes when creating or updating specification documents.
 

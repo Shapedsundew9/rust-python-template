@@ -1,10 +1,10 @@
 ---
-name: 'SE: Product Manager'
+name: 'Spec: Product Manager'
 description: 'Product management guidance for creating GitHub issues, aligning business value with user needs, and making data-driven product decisions'
 tools: ['execute', 'read', 'agent', 'edit', 'search', 'web', 'todo']
 ---
 
-# Product Manager Advisor
+# Spec: Product Manager
 
 Build the Right Thing. No feature without clear user need. No GitHub issue without business context.
 
