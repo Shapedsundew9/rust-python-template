@@ -10,9 +10,6 @@ agents:
   - 'Spec: API Architect'
   - 'Spec: Architecture Reviewer'
   - 'Spec: ADR Generator'
-  - 'Code: Security Reviewer'
-  - 'Code: QA'
-  - 'Code: SWE'
 ---
 
 # Spec: Orchestrator
@@ -120,31 +117,31 @@ For each tier in the requirements pipeline:
 * **Goal**: Define business logic, state machines, user personas, and functional invariants. Invariant across programming languages or database choices.
 * **Authoring Subagents**: `Spec: PRD`, `Spec: Product Manager`, `Spec: Specification`
 * **Syntax Standard**: EARS (*Easy Approach to Requirements Syntax*) using `SHALL` statements.
-* **Validation Subagent**: `Code: QA`
+* **Validation Subagent**: `Spec: Architecture Reviewer`, `Spec: Product Manager`
 
 ### User Experience & Workflows
 
 * **Goal**: Jobs-to-be-Done (JTBD), user journey maps, CLI interaction flows, error feedback ergonomics, and accessibility requirements.
 * **Authoring Subagent**: `Spec: UX Designer`
-* **Validation Subagent**: `Code: QA`, `Spec: Product Manager`
+* **Validation Subagent**: `Spec: Product Manager`
 
 ### Tier 1: Logical Architecture & Interface Contracts
 
 * **Goal**: Component boundaries, message protocols, data interchange schemas (OpenAPI, TypeSpec, JSON Schema, Protobuf), and Architectural Decision Records (ADRs).
 * **Authoring Subagents**: `Spec: Architecture Reviewer`, `Spec: API Architect`, `Spec: ADR Generator`
-* **Validation Subagents**: `Spec: Architecture Reviewer`, `Code: Security Reviewer`
+* **Validation Subagent**: `Spec: Architecture Reviewer`
 
 ### Non-Functional Requirements (NFRs) & Security Invariants
 
 * **Goal**: Latency budgets, throughput, memory/VRAM ceilings, Zero Trust network boundaries, audit trails, and optimistic concurrency rules.
-* **Authoring Subagents**: `Code: Security Reviewer`, `Spec: Architecture Reviewer`
-* **Validation Subagents**: `Code: Security Reviewer`, `Code: QA`
+* **Authoring Subagent**: `Spec: Architecture Reviewer`
+* **Validation Subagent**: `Spec: Architecture Reviewer`
 
 ### Tier 2: Technology Realization Profiles
 
 * **Goal**: Constraints and requirements induced solely by the selected tech stack (e.g., Rust 2024 edition, Tokio async runtime, Axum HTTP routes, Bolt protocol via `neo4rs`, GBNF grammars for local LLM inference).
-* **Authoring Subagents**: `Code: SWE`, `Spec: Specification`
-* **Validation Subagents**: `Spec: Architecture Reviewer`, `Code: QA`
+* **Authoring Subagent**: `Spec: Specification`
+* **Validation Subagent**: `Spec: Architecture Reviewer`
 
 ---
 

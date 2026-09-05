@@ -8,7 +8,6 @@ agents:
   - 'Code: QA Lite'
   - 'Code: Debug'
   - 'Code: Rust MCP Expert'
-  - 'Spec: Architecture Reviewer'
   - 'Code: Security Reviewer'
 ---
 
