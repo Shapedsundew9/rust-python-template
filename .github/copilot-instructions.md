@@ -7,6 +7,7 @@
 - Put reusable Python code in `python/src/tools/`.
 - Put Python tests in `python/tests/`.
 - Put one-off Python programs in `python/scripts/`.
+- Put Python scientific experiment packages in `python/experiments/`.
 - Do not mix Python files into the Rust `src/` directory.
 - Do not assume Rust/Python FFI unless explicitly requested.
 

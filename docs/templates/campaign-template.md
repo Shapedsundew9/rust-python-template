@@ -49,10 +49,10 @@ Track the structural capability rungs established by the campaign:
 
 Audit log of every discovery cycle executed within this campaign:
 
-| Cycle | Hypothesis | Protocol | Run ID | Diagnostic Verdict | Action Selected | User Gate Approval |
-|---|---|---|---|---|---|---|
-| 1 | `HYP-014` | `EXP-014a` | `RUN-EXP-014a-01` | Inconclusive (state collapse at $\lambda=1.0$) | MUTATE (soft penalty) | Approved (Gate I on YYYY-MM-DD) |
-| 2 | `HYP-014-v2` | `EXP-014b` | `RUN-EXP-014b-01` | Supported ($\text{BWT} = -0.03 \pm 0.02$) | EXPLOIT (narrow sweep) | Approved (Gate I on YYYY-MM-DD) |
+| Cycle | Hypothesis | Protocol | Package Path | Run ID | Git Tag | Diagnostic Verdict | Action Selected | User Gate Approval |
+|---|---|---|---|---|---|---|---|---|
+| 1 | `HYP-014` | `EXP-014a` | `python/experiments/exp_014a_flux/` | `RUN-EXP-014a-01` | `exp/EXP-014a-01` | Inconclusive (collapse at $\lambda=1.0$) | MUTATE (soft penalty) | Approved (Gate I on YYYY-MM-DD) |
+| 2 | `HYP-014-v2` | `EXP-014b` | `python/experiments/exp_014b_penalty/` | `RUN-EXP-014b-01` | `exp/EXP-014b-01` | Supported ($\text{BWT} = -0.03 \pm 0.02$) | ADVANCE (Rung 4 evaluation) | Approved (Gate I on YYYY-MM-DD) |
 
 ---
 

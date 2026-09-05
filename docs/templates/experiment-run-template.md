@@ -12,7 +12,8 @@ Save completed run logs to `docs/research/runs/RUN-EXP-YYYY-NNNa-[run-id].md`.
 - **Run Identifier**: RUN-EXP-YYYY-NNNa-[run-id]
 - **Protocol Reference**: `docs/research/protocols/EXP-YYYY-NNNa.md`
 - **Hypothesis Reference**: `docs/research/hypotheses/HYP-YYYY-NNN.md`
-- **Lead Execution Agent**: Code: RUG Orchestrator | Manual Operator CLI
+- **Experiment Package**: `python/experiments/EXP-YYYY-NNNa-[slug]/`
+- **Lead Execution Agent**: Code: SWE (Execution Worker) | Manual Operator CLI
 - **Date & Duration**: YYYY-MM-DD HH:MM:SS UTC (Duration: [X]h [Y]m [Z]s)
 
 ---
@@ -22,7 +23,8 @@ Save completed run logs to `docs/research/runs/RUN-EXP-YYYY-NNNa-[run-id].md`.
 | Dimension | Specification |
 |---|---|
 | Git Commit SHA | `[40-character git commit hash]` |
-| Git Status Dirty? | Yes / No (if yes, list modified files) |
+| Git Tag | `exp/EXP-YYYY-NNNa-[run-id]` |
+| Git Status Dirty? | No (Must be clean for official run) |
 | Runtime / Compiler | Python 3.13.x / Rust 1.85+ |
 | Hardware Profile | [e.g., 1x NVIDIA RTX 4090 (24GB VRAM), 64GB System RAM, 16 vCPU] |
 | Operating System | Linux 6.x (x86_64) |
@@ -57,7 +59,17 @@ Document any difference between the pre-registered protocol and what was physica
 
 ---
 
-## 4. Seed Inventory & Completion Matrix
+## 4. Inner-Loop Parameter Discovery & Search Trajectory
+
+Document how the inner loop explored the parameter space (e.g. adaptive bisection, probe points, homing in on phase transitions):
+
+- **Exploration Strategy**: [e.g., Adaptive bisection around critical threshold λ_c, probe points followed by local density sweep]
+- **Observations during Exploration**: [e.g., Attractor collapse observed for λ > 0.6; concentrated seed evaluations in [0.2, 0.5] interval]
+- **Search Trajectory Summary**: [e.g., Evaluated 6 initial probes, identified stable band at [0.30, 0.45], executed full seed battery on optimal points]
+
+---
+
+## 5. Seed Inventory & Completion Matrix
 
 | Seed Range | Scheduled | Completed | Aborted / Timed Out | Anomaly Notes |
 | --- | --- | --- | --- | --- |
@@ -70,7 +82,7 @@ Document any difference between the pre-registered protocol and what was physica
 
 ---
 
-## 5. Telemetry Artifacts & Checksums
+## 6. Telemetry Artifacts & Checksums
 
 All emitted telemetry files and their cryptographic checksums:
 
@@ -82,7 +94,7 @@ All emitted telemetry files and their cryptographic checksums:
 
 ---
 
-## 6. Telemetry Data Reduction Summary
+## 7. Telemetry Data Reduction Summary
 
 Summary computed programmatically by reduction tool before dispatch to Empirical Diagnostician:
 
@@ -92,9 +104,11 @@ Summary computed programmatically by reduction tool before dispatch to Empirical
 
 ---
 
-## 7. Execution Sign-Off
+## 8. Execution Sign-Off
 
 - [x] Run conforms to pre-registered protocol (or documented deviations above).
+- [x] Clean working tree verified (`git status --porcelain` is empty, Git Status Dirty is No).
+- [x] Git tag applied: `exp/EXP-YYYY-NNNa-[run-id]`.
 - [x] Telemetry integrity validated and verified non-empty.
 - [x] Telemetry reduced to summary format for Empirical Diagnostician ingestion.
 - **Status**: READY FOR DIAGNOSTIC EVALUATION

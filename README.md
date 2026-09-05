@@ -18,32 +18,51 @@ The agent suite is structured into three strictly decoupled, domain-bounded trac
 
 ## 🏛️ Architectural Guardrails: Depth & Domain Boundaries
 
-To prevent recursion, runaway execution, and architectural confusion, the multi-agent system enforces two foundational design constraints:
+To prevent recursion, runaway execution, and architectural confusion across platforms (including GitHub Copilot in VS Code and Google Antigravity `agy`), the multi-agent system enforces foundational design constraints:
 
 ### 1. The 1-Level Subagent Depth Constraint
 
-In modern coding agent platforms (including GitHub Copilot and VS Code agents), subagent delegation is strictly **one level deep**:
+In modern coding agent platforms, subagent delegation is strictly **one level deep**:
 
 $$\text{Operator / User} \longrightarrow \text{Lead Orchestrator} \longrightarrow \text{Leaf Subagent}$$
 
-- Subagents **cannot** invoke further subagents. Nested delegation is disabled to eliminate the risk of unbounded recursion, cyclical execution loops, and runaway context window costs.
-- Orchestrators **cannot** call orchestrators from other groups. Because an orchestrator requires root management privileges to decompose tasks and launch workers, running an orchestrator inside another orchestrator causes delegation failure.
-- The **Operator / User** acts as the overarching lifecycle coordinator, invoking orchestrators sequentially across track boundaries.
+- **No Subagents of Subagents**: Subagents **cannot** invoke further subagents. Nested delegation is disabled or blocked by default across platforms (such as VS Code Copilot agent mode and Antigravity CLI) to eliminate the risk of unbounded recursion, exponential token cost escalation ($O(B^D)$), lossy semantic compression ("the telephone game" across summarization layers), and runaway execution loops.
+- **Orchestrators Cannot Run Inside Orchestrators**: An orchestrator requires root management privileges to decompose tasks, dispatch child workers, and maintain session tracking. Running an orchestrator inside another orchestrator causes immediate delegation failure or permission denial.
+- **The Operator is the Root Lifecycle Coordinator**: For cross-track handoffs that transition between major software phases (e.g. from formal specification to production coding), the **Operator / User** acts as the overarching coordinator, verifying stage gates and invoking the appropriate lead orchestrator.
 
-### 2. Strict Domain Encapsulation (Zero Cross-Group Calls)
+### 2. Tailored Orchestration Styles for Different Engineering Intents
 
-Every agent belongs to exactly one track (`Spec:*`, `Code:*`, or `Sci:*`) and operates strictly within its domain:
+Different software workflows have fundamentally divergent operational goals. This template provides three distinct orchestration tracks, each designed for its specific domain:
 
-- **`Spec:*` Agents** never write runtime code, execute test suites, or dispatch `Code:*` subagents.
-- **`Code:*` Agents** never author abstract requirements documents or dispatch `Spec:*` subagents.
-- **`Sci:*` Agents** never implement code harnesses or dispatch `Code:*` subagents.
-- **Inter-Track Collaboration** is achieved exclusively via **standardized, typed file artifacts** passed across user-mediated stage gates.
+| Track | Engineering Intent | Workflow Nature | Verification Model | Subagent Topology |
+| :--- | :--- | :--- | :--- | :--- |
+| **Specification Track (`Spec:*`)** | Formal domain invariants, OpenAPI schemas, ADRs, realization profiles | **Convergent & Deliberate**: Infrequent, multi-tier refinement | Explicit human gates (Gate 0, UX, Gate 1, Gate 2) | 1-level: `Spec: Orchestrator` $\rightarrow$ drafting & auditing specialists |
+| **Production Code Track (`Code:*`)** | Memory-safe Rust core, production services, clean APIs, database migrations | **Convergent & Zero-Drift**: Enterprise software engineering | Strict **Repeat Until Good (RUG)**, independent QA, complete test suites (`cargo test`, `unittest`) | 1-level: `Code: RUG Orchestrator` $\rightarrow$ `swe`, `debug`, `qa-lite`, `qa` |
+| **Scientific Research Track (`Sci:*`)** | Hypothesis testing, parameter sweeps, dynamical diagnostics, discovery loops | **Divergent & Evolutionary**: Rapid iteration, controlled exploration ("wandering") | Pre-registered metrics, automated telemetry reduction, Gate H/P & Gate I steering | 1-level: `Sci: Orchestrator` $\rightarrow$ theory specialists + **direct execution worker (`swe`)** |
+
+#### Resolving the Science-to-Code Orchestration Dilemma
+
+A common design pitfall in multi-agent systems is attempting to invoke `Code: RUG Orchestrator` *inside* `Sci: Orchestrator` for exploratory script tweaks. This fails on two counts:
+
+1. **Nested Subagent Violation**: It creates an illegal 2-level delegation chain (`Sci: Orchestrator` $\rightarrow$ `RUG Orchestrator` $\rightarrow$ `SWE` worker).
+2. **Impedance Mismatch**: RUG is built for enterprise release rigor (strict task decomposition, independent diff audits, acceptance checklists). Scientific exploration requires an **agile lab technician**: packaging an isolated experiment, exploring parameter spaces with adaptive intelligence, reducing telemetry, and feeding results back into the diagnostic state machine.
+
+To solve this, **`Sci: Orchestrator` directly dispatches an execution worker (`Code: SWE` or runner scripts)** within its own 1-level hierarchy. The Scientific Research Track is autonomous and self-contained; its mission terminates not in production software releases, but in rigorous empirical discovery, reproducible experiment packages, execution manifests, and durable diagnostic dossiers.
+
+### 3. How to Choose and Use Flows in Your Project
+
+Depending on the primary intent of your project or sub-campaign, select the appropriate track:
+
+- **Track 1: Production Systems Engineering (Spec $\rightarrow$ Code)**:
+  Use when building robust libraries, services, or tools. Run `Spec: Orchestrator` to produce formal requirements in `docs/requirements/`. Once Gate 2 is approved, launch `Code: RUG Orchestrator` pointing to the approved spec.
+- **Track 2: Autonomous Scientific Discovery (Sci Loop)**:
+  Use for machine learning experiments, evolutionary algorithms, dynamical simulations, or complex systems discovery. Run `Sci: Orchestrator`. It directs theoretical hypotheses, designs protocols, provisions isolated experiment packages in language-scoped directories (`python/experiments/`), conducts intelligent parameter exploration, reduces telemetry, and iterates based on diagnostic evaluations—recording permanent, reproducible findings under Git tags.
 
 ---
 
 ## 🤖 Multi-Agent System Architecture
 
-The following diagram illustrates how the three decoupled agent tracks interact with the user and exchange artifacts across track boundaries:
+The following diagram illustrates how the three decoupled agent tracks operate within the 1-level depth constraint, interact with the user, and exchange durable artifacts:
 
 ```mermaid
 %%{init: {
@@ -80,7 +99,7 @@ flowchart TB
     classDef tertiary fill:#1d2c44,stroke:#61afef,stroke-width:1.5px,color:#e4f0fc;
     classDef note fill:#2e271a,stroke:#e5c07b,stroke-width:1.5px,color:#fdf4db;
 
-    USER["👤 Operator / User<br/><i>(Root Lifecycle Coordinator & Decision Gatekeeper)</i>"]:::note
+    USER["👤 Operator / User<br/><i>(Root Lifecycle Coordinator & Principal Investigator)</i>"]:::note
 
     subgraph SPEC_TRACK["Specification & Architecture Track (Spec:*)"]
         SPEC_O["🎯 Spec: Orchestrator<br/><i>(Progressive Refinement)</i>"]:::primary
@@ -93,31 +112,31 @@ flowchart TB
     subgraph CODE_TRACK["Implementation & Quality Track (Code:*)"]
         CODE_O["🎯 Code: RUG Orchestrator<br/><i>(Repeat-Until-Good Manager)</i>"]:::primary
         CODE_SUBS["👥 Code Subagents<br/><i>(SWE, Debug, QA Lite, QA, Security)</i>"]:::secondary
-        CODE_PROD["💻 Code, Tests & Run Logs<br/><i>(src/, python/, tests/, docs/implementation/)</i>"]:::tertiary
+        CODE_PROD["💻 Production Code & Tests<br/><i>(src/, python/src/tools/, tests/)</i>"]:::tertiary
         CODE_O <-->|"1-level dispatch"| CODE_SUBS
-        CODE_SUBS -->|"Implements & Tests"| CODE_PROD
+        CODE_SUBS -->|"Implements & Verifies"| CODE_PROD
     end
 
     subgraph SCI_TRACK["Scientific Research Track (Sci:*)"]
-        SCI_O["🎯 Sci: Orchestrator<br/><i>(Research State Machine Controller)</i>"]:::primary
+        SCI_O["🎯 Sci: Orchestrator<br/><i>(Research Loop Lead)</i>"]:::primary
         SCI_SUBS["👥 Sci Subagents<br/><i>(Strategist, Hypothesis, Protocol, Diagnostician, Curriculum)</i>"]:::secondary
-        SCI_ARTS["🔬 Research Artifacts<br/><i>(Protocols, Implementation Specs, Diagnostic Reports)</i>"]:::tertiary
-        SCI_O <-->|"1-level dispatch"| SCI_SUBS
-        SCI_SUBS -->|"Generates"| SCI_ARTS
+        SCI_SWE["💻 Sci Execution Worker<br/><i>(Code: SWE / Script Runner)</i>"]:::secondary
+        SCI_ARTS["🔬 Research Artifacts & Telemetry<br/><i>(Protocols, Manifests, data/telemetry/)</i>"]:::tertiary
+        SCI_O <-->|"1-level theory dispatch"| SCI_SUBS
+        SCI_O <-->|"1-level execution dispatch"| SCI_SWE
+        SCI_SWE -->|"Runs sweeps & reduces"| SCI_ARTS
+        SCI_SUBS -->|"Generates & analyzes"| SCI_ARTS
     end
 
     USER -->|"1. Directs Intent & Approves Tiers"| SPEC_O
     SPEC_ARTS -.->|"Approved Specs Handed to User"| USER
     USER -->|"2. Dispatches Specs for Implementation"| CODE_O
-    CODE_PROD -.->|"Code & Run Logs Handed to User"| USER
+    CODE_PROD -.->|"Production Release Handed to User"| USER
     CODE_O -.->|"3. Spec Change Proposal (Reverse Escalation)"| USER
     USER -.->|"4. Amends Specs on Blocker"| SPEC_O
 
-    USER -->|"A. Directs Research Campaigns"| SCI_O
-    SCI_ARTS -.->|"Experiment Spec Handed to User"| USER
-    USER -->|"B. Dispatches Experiment Harness"| CODE_O
-    CODE_PROD -.->|"Telemetry & Output Logs"| USER
-    USER -->|"C. Feeds Telemetry to Diagnostician"| SCI_O
+    USER <-->|"A. Directs Research Campaigns (Gates H/P & I)"| SCI_O
+    SCI_ARTS -.->|"B. Validated Findings & Permanent Research Dossier"| USER
 ```
 
 ---
@@ -371,10 +390,13 @@ The RUG Orchestrator controls automated verification rigor via mode flags:
 The **Scientific Track** coordinates empirical discovery campaigns. Managed by [`Sci: Orchestrator`](.github/agents/sci-orchestrator.agent.md), it enforces a formal research lifecycle state machine:
 
 - **Theoretical & Measurement Purity**: Separates mathematical modeling, empirical experiment protocol design, and dynamical diagnostics from code implementation.
-- **Persistent Campaign Continuity**: Tracks theoretical capability progression on a complexity ladder across sessions in `docs/research/CAMPAIGN.md`.
-- **Execution Gate & Run Manifest**: The protocol designer outputs both the measurement protocol and the machine-readable `Experiment Implementation Specification`. The operator signs off at **Gate H/P**, executes via the Code Track, and records an `Experiment Run Manifest` (`docs/research/runs/RUN-EXP-*.md`) capturing runtime environment, seed completions, and parameter overrides.
+- **Direct Execution Dispatch (1-Level Architecture)**: To eliminate illegal nested-subagent calls (`Sci` $\rightarrow$ `RUG` $\rightarrow$ `SWE`) and avoid burdensome enterprise release ceremonies for exploratory script adjustments, `Sci: Orchestrator` directly dispatches an execution worker (`Code: SWE` / `swe` or local runner) within its own 1-level hierarchy.
+- **Two-Tier Loop Architecture (Inner vs. Outer Loop)**: Decouples autonomous parameter exploration from macro-level scientific evolution. The inner loop searches parameter regimes intelligently, while the outer loop drives algorithmic mutations, structural ablations, and complexity progression.
+- **Language-Scoped Experiment Isolation**: Every experiment is provisioned as an independent, immutable package under the respective language tree (e.g. `python/experiments/EXP-YYYY-NNNa-[slug]/`), strictly preserving historical reproducibility.
+- **Persistent Campaign Continuity & Provenance**: Tracks theoretical capability progression on a complexity ladder across sessions in `docs/research/CAMPAIGN.md`, with every run pinned by cryptographic checksums and Git tags.
 - **Programmatic Telemetry Reduction**: Raw multi-gigabyte telemetry is reduced via scripts to statistical summaries and phase plots before ingestion by the Empirical Diagnostician.
-- **Human-Gated Discovery Loop**: All iteration directives (Exploit, Mutate, Ablate, Pivot) pass through **Gate I** for operator approval before new hypotheses or protocols are dispatched.
+- **Human-Gated Discovery Loop**: All macro-level iteration directives (Mutate, Advance, Ablate, Pivot) pass through **Gate I** for operator approval as Principal Investigator before new hypotheses or protocols are dispatched.
+- **Autonomous & Terminal Research Scope**: The research track is self-contained. Its mission terminates not in production software releases, but in rigorous empirical discovery, reproducible experiment packages, execution manifests, and durable diagnostic dossiers.
 
 ### Research Lifecycle & Execution Handoff
 
@@ -423,24 +445,26 @@ flowchart TD
         GATE_HP["🔒 Gate H/P: Protocol & Budget Sign-Off<br/><i>(Operator verifies compute & sweep limits)</i>"]:::note
     end
 
-    subgraph EXECUTION["3. Execution & Provenance Capture"]
-        GATE_EXEC["⚙️ Execution Handoff<br/><i>(Executed via Code Track or runner)</i>"]:::tertiary
+    subgraph EXECUTION["3. Execution & Provenance Capture (Direct 1-Level Dispatch)"]
+        EXEC_W["💻 Code: SWE / Runner<br/><i>(Direct execution worker for sweeps)</i>"]:::secondary
+        EXP_PKG["📦 Isolated Experiment Package<br/><i>(python/experiments/EXP-*/)</i>"]:::tertiary
         RUN_MANIFEST["📋 Run Manifest & Telemetry<br/><i>(RUN-EXP-*.md & data/telemetry/)</i>"]:::tertiary
         REDUCE["⚡ Telemetry Data Reduction<br/><i>(scripts/reduce_telemetry.py)</i>"]:::secondary
         SUMMARY["📊 Reduced Summary Metrics<br/><i>(summary_reduced.json & plots)</i>"]:::tertiary
+        EXEC_W -->|"Provisions & runs"| EXP_PKG
+        EXP_PKG -->|"Emits Raw Logs & Manifest"| RUN_MANIFEST
     end
 
     subgraph EVALUATION["4. Empirical Diagnostics & Discovery Loop"]
         DIAG["🔬 Sci: Empirical Diagnostician<br/><i>(Phase portraits, attractors, failure modes)</i>"]:::secondary
-        CURR["🧭 Sci: Curriculum Director<br/><i>(Exploit, Mutate, or Ablate directive)</i>"]:::primary
+        CURR["🧭 Sci: Curriculum Director<br/><i>(Mutate, Advance, or Ablate directive)</i>"]:::primary
         GATE_I["🔒 Gate I: Iteration Decision Gate<br/><i>(Operator signs off on next move)</i>"]:::note
     end
 
     STRAT -->|"Strategic Milestone Directive"| HYP
     HYP -->|"Formal Hypothesis Document"| PROTO
     PROTO -->|"Protocol & Implementation Spec"| GATE_HP
-    GATE_HP -->|"Approved"| GATE_EXEC
-    GATE_EXEC -->|"Emits Raw Logs & Manifest"| RUN_MANIFEST
+    GATE_HP -->|"Approved"| EXEC_W
     RUN_MANIFEST -->|"Input to Script"| REDUCE
     REDUCE -->|"Produces Compact Metrics"| SUMMARY
     SUMMARY & RUN_MANIFEST -->|"Ingested for Analysis"| DIAG
@@ -448,31 +472,77 @@ flowchart TD
     CURR -->|"Iteration Directive"| GATE_I
 
     GATE_I -->|"Mutate Approved"| HYP
-    GATE_I -->|"Exploit / Ablate Approved"| PROTO
+    GATE_I -->|"Advance / Ablate Approved"| PROTO
     GATE_I -.->|"Stall Detected: Pivot Approved"| STRAT
-    GATE_I -.->|"Milestone Verified"| MILESTONE_DONE["🏁 Research Milestone Complete"]:::note
+    GATE_I -.->|"Milestone Verified"| MILESTONE_DONE["🏁 Research Milestone Complete<br/><i>(Validated Research Dossier & Pinned Tags)</i>"]:::note
 ```
+
+### 🏛️ Scientific Version Control, Provenance & Reproducibility Architecture
+
+#### The Philosophy: Good Science Demands Frozen History
+
+Scientific inquiry is inherently evolutionary, non-linear, and branching. In conventional software engineering, code changes converge linearly toward a release, and older implementations are continuously refactored or overwritten. In scientific research, however, mutating code in place is disastrous: it silently invalidates prior baselines, making retrospective auditing, peer review, and comparative ablation impossible.
+
+Once an experiment is executed and its manifest is published, that experiment's code, configurations, seeds, and analytical interpretations must remain **permanently frozen, auditable, and runnable**.
+
+#### The Separation of "Apparatus" vs. "Experiment Packages"
+
+To maintain clarity and prevent code rot, the codebase strictly separates shared scientific infrastructure from individual experiment instances:
+
+1. **The Shared Lab Apparatus (`python/src/tools/` or Rust `src/`)**:
+   - Reusable simulation engines, dynamical operators, linear algebra utilities, telemetry loggers, reduction tools, and phase-space projection calculators.
+   - Tested under [`python/tests/`](python/tests/) and maintained with strict backward-compatibility so earlier experiments never break when shared tools improve.
+2. **Isolated Experiment Packages (`python/experiments/EXP-YYYY-NNNa-[slug]/`)**:
+   - Every experiment is provisioned as an independent package under its language directory containing its specific algorithmic implementation (`dynamics.py`), inner-loop sweep configurations (`config.toml`), runner entrypoint (`run.py`), and localized test/verification routines.
+   - When an experiment is completed, this directory becomes **strictly read-only**.
+   - If cycle 2 requires an algorithmic mutation, it creates a new package (`python/experiments/EXP-YYYY-NNNb-[slug]/`) that can import from `tools` or subclass prior experiments, clearly declaring its parent lineage in its metadata.
+
+#### Two-Tier Loop Architecture: Inner vs. Outer Loop
+
+The multi-agent research track formally distinguishes between exploratory parameter discovery and structural scientific evolution:
+
+- **The Inner Loop (Autonomous Parameter & Regime Discovery)**:
+  - Governed by the execution worker (`Code: SWE` or runner) within an isolated experiment package.
+  - Rather than executing a rigid or blind brute-force grid, the worker leverages LLM intelligence to adaptively probe the parameter space, discover regime transitions, observe phase portraits, and home in on critical boundaries (e.g. attractor stability vs. chaotic collapse).
+  - The trajectory of parameter exploration is recorded directly in the run manifest without requiring multi-agent committee deliberation for every hyperparameter adjustment.
+- **The Outer Loop (Scientific Evolution & Complexity Ladder)**:
+  - Governed by the Science Multi-Agent Committee ([`Sci: Research Strategist`](.github/agents/sci-research-strategist.agent.md), [`Sci: Hypothesis Formulator`](.github/agents/sci-hypothesis-formulator.agent.md), [`Sci: Experiment Protocol Designer`](.github/agents/sci-experiment-protocol.agent.md), [`Sci: Empirical Diagnostician`](.github/agents/sci-empirical-diagnostician.agent.md), [`Sci: Curriculum Director`](.github/agents/sci-curriculum-director.agent.md)).
+  - Operates across the macro-level scientific state machine: formulating new mathematical hypotheses, designing novel experiment packages, diagnosing complex dynamical behaviors, and executing structural mutations (`MUTATE`), mechanism ablations (`ABLATE`), or complexity ladder advancements (`ADVANCE`).
+
+#### Git Hygiene & Tagging: Why Single-Branch Tagging Wins
+
+Rather than fragmenting the repository into dozens of divergent Git branches, the scientific track operates on **single-branch additive directories coupled with Git tags** (`exp/EXP-YYYY-NNNa-[run-id]`):
+
+- **LLM Tool Ergonomics**: LLM agents inspect and diff code using `read`, `grep_search`, and file inspection tools. If past experiments live on separate git branches, agents cannot inspect or compare algorithms without executing git checkout commands—which alters the working tree, invalidates caches, and risks uncommitted file loss. In additive directories, past experiments are immediately visible side-by-side.
+- **IDE & Language Server Stability**: Switching Git branches causes filesystem churn, reloads file watchers, and forces Rust Analyzer and Python language servers (Pyright/mypy) to flush caches and re-index. Single-branch additive layouts maintain complete IDE stability.
+- **Cryptographic Immutability**: Applying a Git tag upon run completion pins the exact commit hash of the code, configs, protocol, and run manifest at that point in time.
+- **Clean Working Tree Invariant**: Sweeps are never executed or logged with uncommitted changes. `Git Status Dirty` must be `No` in every official run manifest.
 
 ### Science-to-Engineering Protocol & Execution Gate
 
 The `Sci: Experiment Protocol Designer` includes an **Experiment Implementation Specification** in every protocol document before presenting it at **Gate H/P**:
 
-1. **CLI Entry Points**: Exact executable commands, script targets, and argument signatures.
-2. **Parameter Sweep Configs**: Explicit grid/random search spaces, seed sets, and sweep strategies.
-3. **Emission Schemas**: JSON/CSV telemetry fields, logging frequencies, and target directories.
-4. **Resource Budgets**: Wall-clock timeouts, memory limits, and process limits.
-5. **Success Gates & Reduction**: Minimum metric thresholds and automated telemetry reduction targets before returning logs to the Diagnostician.
+1. **Target Experiment Package**: Exact package path under the language tree (e.g. `python/experiments/EXP-YYYY-NNNa-[slug]/`).
+2. **Parent Lineage**: Explicit parent protocol reference (if mutating or ablating a prior experiment).
+3. **CLI Entry Points**: Exact executable commands, script targets, and argument signatures.
+4. **Parameter Search Space & Strategy**: Explicit parameter boundaries, seed sets, and guidance for adaptive discovery within the space.
+5. **Emission Schemas**: JSON/CSV telemetry fields, logging frequencies, and target directories under `data/telemetry/`.
+6. **Resource Budgets**: Wall-clock timeouts, memory limits, and process limits.
+7. **Success Gates & Reduction**: Minimum metric thresholds and automated telemetry reduction targets before returning logs to the Diagnostician.
+
+Once signed off at **Gate H/P**, `Sci: Orchestrator` directly dispatches an execution worker (`Code: SWE` or runner script) to provision the experiment package, execute the adaptive sweep, execute telemetry reduction (`python/scripts/reduce_telemetry.py`), commit the clean code, create the Git tag, and log the `RUN-EXP-*.md` manifest.
 
 ### `Sci:*` Subagents Catalog
 
 | Agent Name | Lifecycle Stage | Role | Primary Input | Primary Output |
 | :--- | :--- | :--- | :--- | :--- |
-| **`Sci: Orchestrator`** | Pipeline Controller | State machine manager | Research goal, directives | Dispatches, campaign state tracking |
+| **`Sci: Orchestrator`** | Pipeline Controller | State machine manager | Research goal, directives | Dispatches, campaign state tracking, Git tag governance |
 | **`Sci: Research Strategist`** | Strategic Direction | Paradigm guardian | Campaign history, roadmap | Strategic Milestone Directives, pivot advice |
 | **`Sci: Hypothesis Formulator`** | Theoretical Modeling | Mathematical formalizer | Strategic Directives | Formal Hypothesis Documents (equations, invariants) |
-| **`Sci: Experiment Protocol Designer`** | Empirical Design | Measurement architect | Formal Hypotheses | Structured Experiment Protocols (baselines, ablations) |
+| **`Sci: Experiment Protocol Designer`** | Empirical Design | Measurement architect | Formal Hypotheses | Structured Experiment Protocols & Package Specs |
+| **`Code: SWE`** (or `swe`) | Execution & Exploration | Experiment runner | Experiment Implementation Spec | Isolated package (`python/experiments/`), intelligent sweep, reduced telemetry, Run Manifest & Git tag |
 | **`Sci: Empirical Diagnostician`** | Telemetry Analysis | Experimental analyst | Raw telemetry & state snapshots | Diagnostic Evaluation Reports, failure taxonomy |
-| **`Sci: Curriculum Director`** | Discovery Loop Controller | Adaptive search controller | Diagnostic Reports | Iteration Directives (Exploit, Mutate, Ablate) |
+| **`Sci: Curriculum Director`** | Discovery Loop Controller | Adaptive search controller | Diagnostic Reports | Iteration Directives (Mutate, Advance, Ablate) |
 
 ---
 
@@ -483,8 +553,8 @@ Because agents operate under strict domain encapsulation and a 1-level depth lim
 | Source Track | Originating Artifact | User Handoff Action | Destination Track | Target Orchestrator | Expected Outcome |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **`Spec:*`** | Approved Requirements (`docs/requirements/`) & ADRs (`docs/architecture/`) | Operator triggers implementation | **`Code:*`** | `Code: RUG Orchestrator` | Fully implemented, unit-tested, and verified software |
-| **`Sci:*`** | Experiment Protocol & Eng Spec (`docs/research/protocols/EXP-*.md`) | Operator signs off at Gate H/P & triggers testbed execution | **`Code:*`** (or CLI runner) | `Code: RUG Orchestrator` | Executed experiment sweeps, test harness, & raw telemetry |
-| **`Code:*`** | Run Manifest (`docs/research/runs/RUN-EXP-*.md`) & Reduced Telemetry (`data/telemetry/`) | Operator passes verified data to research pipeline | **`Sci:*`** | `Sci: Orchestrator` | Empirical diagnostics and adaptive iteration directives |
+| **`Sci:*`** | Validated Research Findings & Manifests (`docs/research/CAMPAIGN.md`, `DIAG-*.md`, `RUN-EXP-*.md`) | Operator reviews scientific conclusion and tags | **Operator / Records** | N/A | Durable, reproducible scientific dossier with pinned code tags and telemetry manifests |
+| **`Code:*`** | Run Manifest (`docs/research/runs/RUN-EXP-*.md`) & Reduced Telemetry (`data/telemetry/`) | Operator passes verified data to research pipeline (if runner used externally) | **`Sci:*`** | `Sci: Orchestrator` | Empirical diagnostics and adaptive iteration directives |
 | **`Code:*`** | Spec Change Proposal (Escalation report on infeasible requirement) | Operator routes architectural roadblock/defect | **`Spec:*`** | `Spec: Orchestrator` | Updated formal requirements (`REQ-T*`) or new ADR (`ADR-NNNN-*`) |
 | **`Code:*`** | Run & Decision Log (`docs/implementation/RUN-YYYYMMDD-*.md`) | Operator reviews implementation decisions & test proof | **Operator / Records** | N/A | Durable audit trail of plan vs implementation drift and decisions |
 | **`Sci:*`** | Research Campaign State Tracker (`docs/research/CAMPAIGN.md`) | Operator monitors complexity ladder progression | **Operator / Records** | N/A | Cross-session continuity of milestones, hypotheses, and iteration history |
@@ -532,7 +602,9 @@ This template enforces a strict separation between Rust high-performance core lo
 │   └── templates/             # Templates for ADRs, requirements, roadmaps, and runs
 ├── python/                    # Python workspace
 │   ├── pyproject.toml         # Python dependency definitions
-│   ├── src/tools/             # Reusable Python tools (imported as `tools`)
+│   ├── experiments/           # Additive, immutable experiment packages (exp_YYYY_NNNa_*)
+│   ├── scripts/               # One-off utility scripts
+│   ├── src/tools/             # Reusable Python tools / lab apparatus (imported as `tools`)
 │   └── tests/                 # Python unit and integration tests
 ├── src/                       # Rust primary workspace (main.rs, core libraries)
 ├── tests/                     # Rust integration tests
@@ -544,7 +616,7 @@ This template enforces a strict separation between Rust high-performance core lo
 ### Dual-Language Rules
 
 - **Rust**: Put production code in `src/` and integration tests in `tests/`. Do not mix Python into `src/`.
-- **Python**: Use `.venv/bin/python`. Declare dependencies in `python/pyproject.toml`. Reusable Python packages reside in `python/src/tools/` and are imported as `tools`. Do not modify `PYTHONPATH`.
+- **Python**: Use `.venv/bin/python`. Declare dependencies in `python/pyproject.toml`. Reusable Python packages reside in `python/src/tools/` and are imported as `tools`. Isolated experiment packages reside in `python/experiments/`. Do not modify `PYTHONPATH`.
 
 ---
 
