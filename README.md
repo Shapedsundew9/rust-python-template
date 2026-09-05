@@ -92,8 +92,8 @@ flowchart TB
 
     subgraph CODE_TRACK["Implementation & Quality Track (Code:*)"]
         CODE_O["🎯 Code: RUG Orchestrator<br/><i>(Repeat-Until-Good Manager)</i>"]:::primary
-        CODE_SUBS["👥 Code Subagents<br/><i>(SWE, Debug, MCP, QA Lite, QA, Security)</i>"]:::secondary
-        CODE_PROD["💻 Code & Test Suite<br/><i>(src/, python/, tests/)</i>"]:::tertiary
+        CODE_SUBS["👥 Code Subagents<br/><i>(SWE, Debug, QA Lite, QA, Security)</i>"]:::secondary
+        CODE_PROD["💻 Code, Tests & Run Logs<br/><i>(src/, python/, tests/, docs/implementation/)</i>"]:::tertiary
         CODE_O <-->|"1-level dispatch"| CODE_SUBS
         CODE_SUBS -->|"Implements & Tests"| CODE_PROD
     end
@@ -109,6 +109,9 @@ flowchart TB
     USER -->|"1. Directs Intent & Approves Tiers"| SPEC_O
     SPEC_ARTS -.->|"Approved Specs Handed to User"| USER
     USER -->|"2. Dispatches Specs for Implementation"| CODE_O
+    CODE_PROD -.->|"Code & Run Logs Handed to User"| USER
+    CODE_O -.->|"3. Spec Change Proposal (Reverse Escalation)"| USER
+    USER -.->|"4. Amends Specs on Blocker"| SPEC_O
 
     USER -->|"A. Directs Research Campaigns"| SCI_O
     SCI_ARTS -.->|"Experiment Spec Handed to User"| USER
@@ -124,8 +127,10 @@ flowchart TB
 The **Specification Track** governs the transition from ambiguous human requirements to verifiable software contracts. Led by [`Spec: Orchestrator`](.github/agents/spec-orchestrator.agent.md), it enforces:
 
 - **Pure Specification Scope**: Focuses strictly on problem framing, domain modeling, interface schemas, and realization constraints. Never writes executable runtime code.
-- **In-Domain Quality Audits**: Auditing is performed entirely within the track (`Spec: Product Manager` verifies user value, `Spec: Architecture Reviewer` verifies system boundaries and security architecture, and `Spec: Specification` verifies formal syntax).
-- **Human Decision Gates**: Tiers progress only upon explicit operator review and approval.
+- **Persistent State Across Sessions**: Maintains a durable specification tracker in `docs/requirements/ROADMAP.md` (instantiated from `docs/templates/spec-roadmap-template.md`), capturing stage completions, gate timestamps, approved requirement ranges, and open forks.
+- **In-Domain Quality Audits**: Auditing is performed within the track (`Spec: Product Manager` audits business value and scope discipline; `Spec: Architecture Reviewer` verifies system boundaries, security, and schema rigor). Auditors generate durable reports in `docs/requirements/audits/AUDIT-T{tier}-*.md`.
+- **ADR Governance & Central Registry**: Evaluates architectural fork points via [`Spec: ADR Generator`](.github/agents/spec-adr-generator.agent.md), registers them in [`docs/architecture/README.md`](docs/architecture/README.md), and promotes them from `Proposed` to `Accepted` upon user sign-off at Gate 1 or Gate 2.
+- **Human Decision Gates & Invalidation Discipline**: Progresses only upon explicit operator sign-off against structured gate verification checklists. If revisions occur, downstream artifacts are invalidated before re-drafting.
 
 ### Specification Refinement Workflow
 
@@ -165,75 +170,85 @@ flowchart TD
     classDef note fill:#2e271a,stroke:#e5c07b,stroke-width:1.5px,color:#fdf4db;
 
     ORCH["🎯 Spec: Orchestrator<br/><i>(Align, Draft, Audit, Gate)</i>"]:::primary
+    ROADMAP[("📋 docs/requirements/ROADMAP.md<br/><i>(Persistent State Tracker)</i>")]:::tertiary
 
     subgraph T0_STAGE["Tier 0: Domain Invariants & Product Goals (Tech-Agnostic)"]
-        PRD["Spec: PRD<br/><i>(Mandatory: prd.md user stories & scope)</i>"]:::secondary
-        PM["Spec: Product Manager<br/><i>(Mandatory: Problem framing & business value)</i>"]:::secondary
-        SPEC0["Spec: Specification<br/><i>(Mandatory: Formal REQ-T0 in EARS syntax)</i>"]:::secondary
-        AUDIT_T0["Spec: Architecture Reviewer & PM<br/><i>(Audit: Normative SHALL binding & testability)</i>"]:::secondary
-        GATE0["🔒 Gate 0: User Sign-Off"]:::note
+        PRD["Spec: PRD<br/><i>(Sole Drafting Author: prd.md synthesis)</i>"]:::secondary
+        PM_AUDIT["Spec: Product Manager<br/><i>(Auditor: Business value, KPI validity & backlog slicing)</i>"]:::secondary
+        ARCH_AUDIT["Spec: Architecture Reviewer<br/><i>(Auditor: Invariant testability & boundaries)</i>"]:::secondary
+        SPEC0["Spec: Specification<br/><i>(Extractor: Formal REQ-T0 in EARS syntax)</i>"]:::secondary
+        GATE0["🔒 Gate 0: Scope & Invariants Sign-Off"]:::note
     end
 
-    subgraph UX_STAGE["UX Track: User Experience & Workflows (Optional Stage)"]
-        UX["🎨 Spec: UX Designer<br/><i>(Optional: JTBD, user journeys & interaction flows)</i>"]:::secondary
+    subgraph UX_STAGE["UX Track: User Experience & Workflows"]
+        UX["🎨 Spec: UX Designer<br/><i>(JTBD, user journeys & interaction flows)</i>"]:::secondary
         AUDIT_UX["Spec: Product Manager<br/><i>(Audit: Flow ergonomics & edge states)</i>"]:::secondary
-        GATE_UX["🔒 Gate UX: User Sign-Off"]:::note
+        GATE_UX["🔒 Gate UX: Interaction Sign-Off"]:::note
     end
 
     subgraph T1_STAGE["Tier 1: Logical Architecture & Interface Contracts"]
         ARCH["Spec: Architecture Reviewer<br/><i>(Mandatory: Component boundaries & patterns)</i>"]:::secondary
-        API["Spec: API Architect<br/><i>(Mandatory: Schemas, IDLs & resilience contracts)</i>"]:::secondary
-        ADR["Spec: ADR Generator<br/><i>(Optional: Fork point trade-off matrices)</i>"]:::secondary
-        AUDIT_T1["Spec: Architecture Reviewer<br/><i>(Audit: System cohesion & Well-Architected rules)</i>"]:::secondary
-        GATE1["🔒 Gate 1: User Sign-Off"]:::note
+        API["Spec: API Architect<br/><i>(Mandatory: OpenAPI, schemas & resilience contracts)</i>"]:::secondary
+        ADR["Spec: ADR Generator<br/><i>(Fork point trade-off matrices)</i>"]:::secondary
+        AUDIT_T1["Spec: Architecture Reviewer<br/><i>(Audit: System cohesion & schema rigor)</i>"]:::secondary
+        GATE1["🔒 Gate 1: Contract Sign-Off & ADR Promotion"]:::note
     end
 
     subgraph T2_STAGE["Tier 2: Technology Realization Profiles"]
         SPEC2["Spec: Specification<br/><i>(Mandatory: REQ-T2 realization profiles)</i>"]:::secondary
         AUDIT_T2["Spec: Architecture Reviewer<br/><i>(Audit: Traceability & constraint proof)</i>"]:::secondary
-        GATE2["🔒 Gate 2: Final User Approval & Release"]:::note
+        GATE2["🔒 Gate 2: Implementation Readiness Sign-Off"]:::note
     end
 
-    ORCH -->|"1. Align & Dispatch"| PRD
-    ORCH -->|"1. Align & Dispatch"| PM
-    ORCH -->|"1. Align & Dispatch"| SPEC0
-    PRD & PM & SPEC0 -->|"Drafts"| AUDIT_T0
-    AUDIT_T0 -->|"Verified Proposal"| GATE0
-    AUDIT_T0 -.->|"Audit Failure: Re-draft"| SPEC0
+    ORCH -->|"1. Initialize / Resume"| ROADMAP
+    ORCH -->|"2. Dispatch drafting"| PRD
+    PRD -->|"Draft prd.md"| PM_AUDIT & ARCH_AUDIT
+    PM_AUDIT & ARCH_AUDIT -->|"Validated Proposal & Audit Log"| SPEC0
+    SPEC0 -->|"Formal Requirements Package"| GATE0
+    PM_AUDIT -.->|"Audit Failure: Re-draft"| PRD
+    ARCH_AUDIT -.->|"Audit Failure: Re-draft"| PRD
 
-    GATE0 -->|"Approved"| UX_DECISION{"Has User/CLI Interaction?"}:::primary
-    UX_DECISION -->|"Yes (Optional Path)"| UX
-    UX_DECISION -->|"No: Skip UX"| T1_STAGE
+    GATE0 -.->|"Update State"| ROADMAP
+    GATE0 -->|"Approved: Slices Issues"| PM_AUDIT
+    GATE0 -->|"Operator Prompt"| UX_DECISION{"Has User/CLI Interaction?"}:::primary
+    UX_DECISION -->|"Yes"| UX
+    UX_DECISION -->|"No (Skip UX)"| T1_STAGE
 
     UX -->|"Journey Artifacts"| AUDIT_UX
-    AUDIT_UX -->|"Verified UX"| GATE_UX
+    AUDIT_UX -->|"Verified UX & Audit Log"| GATE_UX
+    GATE_UX -.->|"Update State"| ROADMAP
     GATE_UX -->|"Approved"| T1_STAGE
 
     T1_STAGE --> ARCH & API
     ARCH -.->|"Architectural Fork Detected"| ADR
     ARCH & API & ADR --> AUDIT_T1
-    AUDIT_T1 -->|"Verified Contracts"| GATE1
+    AUDIT_T1 -->|"Verified Contracts & Audit Log"| GATE1
+    GATE1 -.->|"Update State & Accept ADRs"| ROADMAP
     AUDIT_T1 -.->|"Audit Failure: Re-draft"| ARCH
 
     GATE1 -->|"Approved"| T2_STAGE
     T2_STAGE --> SPEC2
     SPEC2 --> AUDIT_T2
-    AUDIT_T2 -->|"Verified Realization"| GATE2
+    AUDIT_T2 -->|"Verified Realization & Audit Log"| GATE2
+    GATE2 -.->|"Release Package"| ROADMAP
     GATE2 -->|"Approved"| FINAL_ARTIFACTS["📦 Approved Requirements Package<br/><i>(docs/requirements/, docs/architecture/)</i>"]:::tertiary
+
+    GATE1 -.->|"Gate 1 Revision / Reject"| T0_STAGE
+    GATE2 -.->|"Gate 2 Revision / Reject"| T1_STAGE
 ```
 
 ### `Spec:*` Subagents Catalog
 
 | Agent Name | Role | Call Nature | Inputs | Primary Deliverables |
 | :--- | :--- | :--- | :--- | :--- |
-| **`Spec: Orchestrator`** | Master Specification Manager | **Orchestrator** | User goal, roadmap | Decomposed plan, stage transitions, decision matrices |
-| **`Spec: PRD`** | Product Requirements Author | **Mandatory (Tier 0)** | User intent, scope | `prd.md` with user stories, acceptance criteria, metrics |
-| **`Spec: Product Manager`** | Business Context & Validation | **Mandatory (Tier 0)** | Feature requests | Problem statements, personas, GitHub issues, scope audit |
+| **`Spec: Orchestrator`** | Master Specification Manager | **Orchestrator** | User goal, roadmap | Decomposed plan, persistent `ROADMAP.md`, stage gates, ADR promotions |
+| **`Spec: PRD`** | Sole Tier 0 Drafting Author | **Mandatory (Tier 0 Author)** | User intent, scope | `prd.md` (10-section outline, personas, user stories) |
+| **`Spec: Product Manager`** | Value & Scope Auditor, Backlog Slicer | **Mandatory (Tier 0 Auditor)** | Draft PRD, feature scope | Value critique report, audit log (`AUDIT-T0-*`), sized GitHub issues & epics |
 | **`Spec: Specification`** | Formal Requirements Author | **Mandatory (T0 & T2)** | PRDs, logical designs | `docs/requirements/` in r9ts format (`REQ-T0-*`, `REQ-T2-*`) |
-| **`Spec: UX Designer`** | Experience & Workflow Designer | **Optional** | User workflows | JTBD analysis, user journey maps, CLI/Web interaction flows |
-| **`Spec: API Architect`** | Interface & Contract Designer | **Mandatory (Tier 1)** | Component boundaries | IDL/OpenAPI/JSON schemas, error contracts, resilience rules |
-| **`Spec: Architecture Reviewer`** | Architecture & Security Reviewer | **Mandatory (Tier 1 & Audits)** | System designs, NFRs | Component decomposition, security architecture, Well-Architected audits |
-| **`Spec: ADR Generator`** | Architecture Decision Author | **Optional / Triggered** | Technology trade-offs | `docs/architecture/adr-NNNN-[slug].md` records |
+| **`Spec: UX Designer`** | Experience & Workflow Designer | **Optional (Gate 0 Decision)** | User workflows | JTBD analysis, user journey maps, CLI/Web interaction flows |
+| **`Spec: API Architect`** | Interface & Contract Designer | **Mandatory (Tier 1)** | Component boundaries | OpenAPI 3.1/JSON schemas, error taxonomies, resilience SLA budgets (NO runtime code) |
+| **`Spec: Architecture Reviewer`** | Architecture & Security Reviewer | **Mandatory (Tier 1 & Audits)** | System designs, NFRs | Component decomposition, security architecture, audit logs (`AUDIT-T1-*`, `AUDIT-T2-*`) |
+| **`Spec: ADR Generator`** | Architecture Decision Author | **Optional / Triggered** | Technology trade-offs | `docs/architecture/adr-NNNN-[slug].md` records & `docs/architecture/README.md` registry |
 
 ---
 
@@ -243,6 +258,8 @@ The **Implementation Track** is driven by [`Code: RUG Orchestrator`](.github/age
 
 - **Pure Orchestration**: The lead agent **never** writes code, edits files, or executes commands directly. It delegates 100% of execution to specialized subagents.
 - **Independent Validation**: Every work subagent's changes are verified by a separate validation subagent with a fresh context window.
+- **Persistent Run & Decision Records**: Every completed implementation session compiles a durable log in `docs/implementation/RUN-YYYYMMDD-[slug].md` capturing technical trade-offs, deviations from spec, and empirical test evidence.
+- **Reverse Escalation Protocol (Rolling Back Up)**: If an upstream specification is technically impossible or contradicts domain invariants, the orchestrator halts execution, formulates a Spec Change Proposal (SCP), and yields to a human decision gate rather than looping indefinitely on code retries.
 - **Strict In-Domain Workers**: Only code implementation, debugging, refactoring, and code verification subagents are dispatched.
 
 ### RUG Execution Loop & Subagent Hierarchy
@@ -289,7 +306,6 @@ flowchart TD
     subgraph WORKERS["Implementation Workers (In-Domain Subagents)"]
         SWE["💻 Code: SWE<br/><i>(Mandatory Worker: Features, edits, refactoring, tests)</i>"]:::secondary
         DEBUG["🔍 Code: Debug<br/><i>(Optional / Conditional: 4-phase bug diagnosis & reproduction)</i>"]:::secondary
-        MCP["🦀 Code: Rust MCP Expert<br/><i>(Optional / Specialized: rmcp SDK, macros & tool handlers)</i>"]:::secondary
     end
 
     subgraph VALIDATION["Validation Subagents (Independent Context)"]
@@ -302,10 +318,9 @@ flowchart TD
     RUG -->|"1. Decompose & Initialize"| TODO
 
     RUG -->|"Standard Task Dispatch"| SWE
-    RUG -.->|"Defect Identified (Optional)"| DEBUG
-    RUG -.->|"Rust MCP Server Work (Specialized)"| MCP
+    RUG -.->|"Defect Diagnosis / Fix"| DEBUG
 
-    SWE & DEBUG & MCP -->|"Produces Diff & Self-Report"| MODE_SELECT{"Validation Mode"}:::primary
+    SWE & DEBUG -->|"Produces Diff & Self-Report"| MODE_SELECT{"Validation Mode"}:::primary
 
     MODE_SELECT -->|"Default / Fast Mode"| QA_LITE
     MODE_SELECT -->|"High-Risk Task / Strict Mode"| QA_FULL
@@ -313,15 +328,21 @@ flowchart TD
 
     QA_LITE & QA_FULL & SEC --> VERDICT{"Validation Outcome"}:::primary
 
-    VERDICT -->|"FAIL (Defects Found)"| RETRY["🔁 Re-dispatch Worker with Defect Report"]:::primary
+    VERDICT -->|"FAIL (Code Defect)"| RETRY["🔁 Re-dispatch Worker with Defect Report"]:::primary
     RETRY --> SWE
+
+    VERDICT -->|"FAIL (Spec Defect / Blocker)"| ESCALATE["⚠️ Escalate: Spec Change Proposal (SCP)"]:::note
+    ESCALATE --> USER_GATE["🔒 User Decision Gate: Roll back to Spec Track or Authorize Exception"]:::note
+    USER_GATE -.->|"Roll Back"| REQ
+    USER_GATE -.->|"Exception Approved"| SWE
 
     VERDICT -->|"PASS"| ADVANCE["✅ Mark Task Complete in Todo"]:::note
     ADVANCE --> MORE_TASKS{"More Tasks in Todo?"}:::primary
 
     MORE_TASKS -->|"Yes: Next Task"| RUG
     MORE_TASKS -->|"No: All Tasks Done"| FINAL_GATE["🏁 Final Integration Gate<br/><i>(Code: QA full test suite run)</i>"]:::primary
-    FINAL_GATE --> COMPLETE["🎉 Verified Working Solution"]:::tertiary
+    FINAL_GATE --> LOG["📝 Compile Run & Decision Log<br/><i>(docs/implementation/RUN-*.md)</i>"]:::tertiary
+    LOG --> COMPLETE["🎉 Verified Working Solution"]:::tertiary
 ```
 
 ### Validation Modes & Flags
@@ -336,12 +357,11 @@ The RUG Orchestrator controls automated verification rigor via mode flags:
 
 | Agent Name | Role | Call Nature | Trigger Condition | Primary Deliverables |
 | :--- | :--- | :--- | :--- | :--- |
-| **`Code: RUG Orchestrator`** | Execution Coordinator | **Orchestrator** | Feature request, task spec | Task decomposition, subagent prompts, iteration loop |
-| **`Code: SWE`** | Senior Software Engineer | **Mandatory Worker** | Standard implementation task | Clean code diffs, unit/integration tests, docstrings |
+| **`Code: RUG Orchestrator`** | Execution Coordinator | **Orchestrator** | Feature request, task spec | Task decomposition, subagent prompts, iteration loop, run logs |
+| **`Code: SWE`** | Senior Software Engineer | **Mandatory Worker** | Standard implementation task | Clean code diffs, unit/integration tests, docstrings, technical decisions |
 | **`Code: Debug`** | Defect Diagnostician | **Optional / Conditional** | Bug report, failing tests | Reproduction recipe, root cause analysis, targeted fix |
-| **`Code: Rust MCP Expert`** | Rust MCP Specialist | **Optional / Specialized** | Model Context Protocol servers | `rmcp` tool definitions, async handlers, Tokio state |
-| **`Code: QA Lite`** | Fast Sanity Validator | **Default Task Auditor** | Routine task completion | Diff sanity verification, acceptance criteria checklist |
-| **`Code: QA`** | Comprehensive QA Tester | **Strict / Integration Auditor** | High-risk tasks, final integration | Test suite logs (`cargo test`, `unittest`), boundary audit |
+| **`Code: QA Lite`** | Fast Sanity Validator | **Default Task Auditor** | Routine task completion | Diff sanity verification, acceptance criteria checklist, defect classification |
+| **`Code: QA`** | Comprehensive QA Tester | **Strict / Integration Auditor** | High-risk tasks, final integration | Test suite logs (`cargo test`, `unittest`), boundary audit, regression proofs |
 | **`Code: Security Reviewer`** | Code Security Specialist | **Optional / Triggered** | Auth, crypto, external boundaries | OWASP Top 10 audit, Zero Trust verification, risk report |
 
 ---
@@ -351,7 +371,10 @@ The RUG Orchestrator controls automated verification rigor via mode flags:
 The **Scientific Track** coordinates empirical discovery campaigns. Managed by [`Sci: Orchestrator`](.github/agents/sci-orchestrator.agent.md), it enforces a formal research lifecycle state machine:
 
 - **Theoretical & Measurement Purity**: Separates mathematical modeling, empirical experiment protocol design, and dynamical diagnostics from code implementation.
-- **Execution Handoff Gate**: The orchestrator outputs a machine-readable **Experiment Implementation Specification** and pauses. The operator executes the experiment (using `Code: RUG Orchestrator` or a local runner) and feeds the resulting telemetry logs back to the scientific pipeline.
+- **Persistent Campaign Continuity**: Tracks theoretical capability progression on a complexity ladder across sessions in `docs/research/CAMPAIGN.md`.
+- **Execution Gate & Run Manifest**: The protocol designer outputs both the measurement protocol and the machine-readable `Experiment Implementation Specification`. The operator signs off at **Gate H/P**, executes via the Code Track, and records an `Experiment Run Manifest` (`docs/research/runs/RUN-EXP-*.md`) capturing runtime environment, seed completions, and parameter overrides.
+- **Programmatic Telemetry Reduction**: Raw multi-gigabyte telemetry is reduced via scripts to statistical summaries and phase plots before ingestion by the Empirical Diagnostician.
+- **Human-Gated Discovery Loop**: All iteration directives (Exploit, Mutate, Ablate, Pivot) pass through **Gate I** for operator approval before new hypotheses or protocols are dispatched.
 
 ### Research Lifecycle & Execution Handoff
 
@@ -393,56 +416,58 @@ flowchart TD
     subgraph FORMULATION["1. Scientific Formulation (In-Domain Sci Subagents)"]
         STRAT["🔭 Sci: Research Strategist<br/><i>(Paradigm guardian & roadmap)</i>"]:::primary
         HYP["📐 Sci: Hypothesis Formulator<br/><i>(Mathematical hypotheses & invariants)</i>"]:::secondary
-        PROTO["📋 Sci: Experiment Protocol Designer<br/><i>(Pre-registered metrics & baselines)</i>"]:::secondary
+        PROTO["📋 Sci: Experiment Protocol Designer<br/><i>(Pre-registered metrics & Eng Spec)</i>"]:::secondary
     end
 
-    subgraph TRANSLATION["2. Protocol Translation Boundary"]
-        SCI_ORCH["🎯 Sci: Orchestrator<br/><i>(Research state machine controller)</i>"]:::primary
-        ENG_SPEC["⚙️ Experiment Implementation Spec<br/><i>(CLI flags, sweep spaces, emission schemas)</i>"]:::tertiary
+    subgraph PROTOCOL_GATE["2. Protocol & Budget Decision Gate"]
+        GATE_HP["🔒 Gate H/P: Protocol & Budget Sign-Off<br/><i>(Operator verifies compute & sweep limits)</i>"]:::note
     end
 
-    subgraph HANDOFF_GATE["3. Execution Handoff Gate (User-Mediated)"]
-        GATE_EXEC["🔒 Execution Gate: Operator Handoff<br/><i>(Operator executes via Code Track or runner)</i>"]:::note
-        LOGS["📊 Telemetry & State-Space Logs<br/><i>(Time series, loss arrays, trajectories)</i>"]:::tertiary
+    subgraph EXECUTION["3. Execution & Provenance Capture"]
+        GATE_EXEC["⚙️ Execution Handoff<br/><i>(Executed via Code Track or runner)</i>"]:::tertiary
+        RUN_MANIFEST["📋 Run Manifest & Telemetry<br/><i>(RUN-EXP-*.md & data/telemetry/)</i>"]:::tertiary
+        REDUCE["⚡ Telemetry Data Reduction<br/><i>(scripts/reduce_telemetry.py)</i>"]:::secondary
+        SUMMARY["📊 Reduced Summary Metrics<br/><i>(summary_reduced.json & plots)</i>"]:::tertiary
     end
 
     subgraph EVALUATION["4. Empirical Diagnostics & Discovery Loop"]
-        DIAG["🔬 Sci: Empirical Diagnostician<br/><i>(Phase portraits, attractors, noise vs emergence)</i>"]:::secondary
+        DIAG["🔬 Sci: Empirical Diagnostician<br/><i>(Phase portraits, attractors, failure modes)</i>"]:::secondary
         CURR["🧭 Sci: Curriculum Director<br/><i>(Exploit, Mutate, or Ablate directive)</i>"]:::primary
+        GATE_I["🔒 Gate I: Iteration Decision Gate<br/><i>(Operator signs off on next move)</i>"]:::note
     end
 
     STRAT -->|"Strategic Milestone Directive"| HYP
     HYP -->|"Formal Hypothesis Document"| PROTO
-    PROTO -->|"Structured Experiment Protocol"| SCI_ORCH
-    SCI_ORCH -->|"Translates Protocol"| ENG_SPEC
-
-    ENG_SPEC --> GATE_EXEC
-    GATE_EXEC -->|"Operator supplies output logs"| LOGS
-    LOGS -->|"Ingested for Analysis"| DIAG
-
+    PROTO -->|"Protocol & Implementation Spec"| GATE_HP
+    GATE_HP -->|"Approved"| GATE_EXEC
+    GATE_EXEC -->|"Emits Raw Logs & Manifest"| RUN_MANIFEST
+    RUN_MANIFEST -->|"Input to Script"| REDUCE
+    REDUCE -->|"Produces Compact Metrics"| SUMMARY
+    SUMMARY & RUN_MANIFEST -->|"Ingested for Analysis"| DIAG
     DIAG -->|"Diagnostic Evaluation Report"| CURR
+    CURR -->|"Iteration Directive"| GATE_I
 
-    CURR -->|"Refine / Mutate"| HYP
-    CURR -->|"Re-parameterize / Ablate"| PROTO
-    CURR -.->|"Stall Detected: Strategic Pivot"| STRAT
-    CURR -.->|"Milestone Verified"| MILESTONE_DONE["🏁 Research Milestone Complete"]:::note
+    GATE_I -->|"Mutate Approved"| HYP
+    GATE_I -->|"Exploit / Ablate Approved"| PROTO
+    GATE_I -.->|"Stall Detected: Pivot Approved"| STRAT
+    GATE_I -.->|"Milestone Verified"| MILESTONE_DONE["🏁 Research Milestone Complete"]:::note
 ```
 
-### Science-to-Engineering Translation Protocol
+### Science-to-Engineering Protocol & Execution Gate
 
-Scientific protocol documents describe what to measure and under what controls. The `Sci: Orchestrator` translates them into an **Experiment Implementation Specification** before presenting it at the Execution Gate:
+The `Sci: Experiment Protocol Designer` includes an **Experiment Implementation Specification** in every protocol document before presenting it at **Gate H/P**:
 
 1. **CLI Entry Points**: Exact executable commands, script targets, and argument signatures.
 2. **Parameter Sweep Configs**: Explicit grid/random search spaces, seed sets, and sweep strategies.
 3. **Emission Schemas**: JSON/CSV telemetry fields, logging frequencies, and target directories.
 4. **Resource Budgets**: Wall-clock timeouts, memory limits, and process limits.
-5. **Success Gates**: Minimum thresholds required before returning logs to the Diagnostician.
+5. **Success Gates & Reduction**: Minimum metric thresholds and automated telemetry reduction targets before returning logs to the Diagnostician.
 
 ### `Sci:*` Subagents Catalog
 
 | Agent Name | Lifecycle Stage | Role | Primary Input | Primary Output |
 | :--- | :--- | :--- | :--- | :--- |
-| **`Sci: Orchestrator`** | Pipeline Controller | State machine manager | Research goal, directives | Dispatches, translated experiment specs |
+| **`Sci: Orchestrator`** | Pipeline Controller | State machine manager | Research goal, directives | Dispatches, campaign state tracking |
 | **`Sci: Research Strategist`** | Strategic Direction | Paradigm guardian | Campaign history, roadmap | Strategic Milestone Directives, pivot advice |
 | **`Sci: Hypothesis Formulator`** | Theoretical Modeling | Mathematical formalizer | Strategic Directives | Formal Hypothesis Documents (equations, invariants) |
 | **`Sci: Experiment Protocol Designer`** | Empirical Design | Measurement architect | Formal Hypotheses | Structured Experiment Protocols (baselines, ablations) |
@@ -458,8 +483,11 @@ Because agents operate under strict domain encapsulation and a 1-level depth lim
 | Source Track | Originating Artifact | User Handoff Action | Destination Track | Target Orchestrator | Expected Outcome |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **`Spec:*`** | Approved Requirements (`docs/requirements/`) & ADRs (`docs/architecture/`) | Operator triggers implementation | **`Code:*`** | `Code: RUG Orchestrator` | Fully implemented, unit-tested, and verified software |
-| **`Sci:*`** | Experiment Implementation Spec (`docs/experiments/EXP-*.md`) | Operator triggers testbed execution | **`Code:*`** (or CLI runner) | `Code: RUG Orchestrator` | Executed experiment sweeps and verified test harness |
-| **`Code:*`** | Telemetry logs, time series, & state dumps (`data/telemetry/*.jsonl`) | Operator passes telemetry to research pipeline | **`Sci:*`** | `Sci: Orchestrator` | Empirical diagnostics and adaptive iteration directives |
+| **`Sci:*`** | Experiment Protocol & Eng Spec (`docs/research/protocols/EXP-*.md`) | Operator signs off at Gate H/P & triggers testbed execution | **`Code:*`** (or CLI runner) | `Code: RUG Orchestrator` | Executed experiment sweeps, test harness, & raw telemetry |
+| **`Code:*`** | Run Manifest (`docs/research/runs/RUN-EXP-*.md`) & Reduced Telemetry (`data/telemetry/`) | Operator passes verified data to research pipeline | **`Sci:*`** | `Sci: Orchestrator` | Empirical diagnostics and adaptive iteration directives |
+| **`Code:*`** | Spec Change Proposal (Escalation report on infeasible requirement) | Operator routes architectural roadblock/defect | **`Spec:*`** | `Spec: Orchestrator` | Updated formal requirements (`REQ-T*`) or new ADR (`ADR-NNNN-*`) |
+| **`Code:*`** | Run & Decision Log (`docs/implementation/RUN-YYYYMMDD-*.md`) | Operator reviews implementation decisions & test proof | **Operator / Records** | N/A | Durable audit trail of plan vs implementation drift and decisions |
+| **`Sci:*`** | Research Campaign State Tracker (`docs/research/CAMPAIGN.md`) | Operator monitors complexity ladder progression | **Operator / Records** | N/A | Cross-session continuity of milestones, hypotheses, and iteration history |
 
 ---
 
@@ -484,10 +512,24 @@ This template enforces a strict separation between Rust high-performance core lo
 .
 ├── .agents/agents/            # Agent definition copies for runtime discovery
 ├── .github/agents/            # GitHub Copilot agent track definitions (spec-*, code-*, sci-*)
+├── data/                      # Experiment runtime data
+│   └── telemetry/             # Raw experiment telemetry and reduced summaries
 ├── docs/                      # Architecture, ADRs, requirements & templates
-│   ├── architecture/          # ADRs generated by Spec: ADR Generator
-│   ├── requirements/          # Formal r9ts requirements (REQ-T0-*, REQ-T1-*, REQ-T2-*)
-│   └── templates/             # Mermaid style guides and diagram boilerplates
+│   ├── architecture/          # ADRs (adr-*.md) and ADR registry (README.md)
+│   ├── implementation/        # Implementation Run & Decision Logs (RUN-YYYYMMDD-*)
+│   ├── requirements/          # Formal r9ts requirements & audits
+│   │   ├── product/           # REQ-T0-* domain invariants
+│   │   ├── architecture/      # REQ-T1-* logical architecture contracts
+│   │   ├── system/            # REQ-T2-* technology realization profiles
+│   │   ├── audits/            # AUDIT-T*-* tier audit reports
+│   │   └── ROADMAP.md         # Persistent specification state tracker
+│   ├── research/              # Scientific research campaign artifacts
+│   │   ├── hypotheses/        # Formal hypotheses (HYP-YYYY-NNN.md)
+│   │   ├── protocols/         # Experiment protocols & specs (EXP-YYYY-NNNa.md)
+│   │   ├── runs/              # Execution manifests & run logs (RUN-EXP-*.md)
+│   │   ├── diagnostics/       # Diagnostic evaluation reports (DIAG-*.md)
+│   │   └── CAMPAIGN.md        # Persistent campaign state tracker
+│   └── templates/             # Templates for ADRs, requirements, roadmaps, and runs
 ├── python/                    # Python workspace
 │   ├── pyproject.toml         # Python dependency definitions
 │   ├── src/tools/             # Reusable Python tools (imported as `tools`)

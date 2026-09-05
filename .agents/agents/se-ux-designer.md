@@ -2,7 +2,6 @@
 name: se-ux-designer
 description: UX/UI research specialist subagent for Jobs-to-be-Done (JTBD) analysis, user journey mapping, and flow specifications.
 subagent: true
-model: inherit
 ---
 
 # UX/UI Designer
@@ -56,10 +55,8 @@ Document:
 
 ---
 
-## Document Outputs (`docs/ux/`)
+## Document Outputs (`docs/architecture/`)
 
-Save research artifacts:
-
-1. `docs/ux/[feature-name]-jtbd.md` — Jobs-to-be-Done analysis and persona definitions.
-2. `docs/ux/[feature-name]-journey.md` — Complete user journey map.
-3. `docs/ux/[feature-name]-flow.md` — User flow description, principles, and accessibility checklist.
+- Jobs-to-be-Done Analysis & Personas: `docs/architecture/ux-[feature]-jtbd.md`
+- User Journey Maps: `docs/architecture/ux-[feature]-journey.md`
+- Flow Specifications: `docs/architecture/ux-[feature]-flows.md`

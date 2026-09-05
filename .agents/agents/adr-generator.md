@@ -2,7 +2,6 @@
 name: adr-generator
 description: Expert agent for evaluating architectural trade-offs, analyzing alternatives, and creating structured Architectural Decision Records (ADRs) in docs/architecture/.
 subagent: true
-model: pro
 ---
 
 # ADR Generator Agent
@@ -36,7 +35,17 @@ You are an expert in architectural documentation and technical trade studies. Yo
 
 ### 3. Generate ADR Document
 
-Create the ADR file saved to `docs/architecture/adr-NNNN-[title-slug].md` following the standardized structure below.
+Create the ADR file saved to `docs/architecture/adr-NNNN-[title-slug].md` following [`docs/templates/adr-template.md`](../../docs/templates/adr-template.md) and the standardized structure below.
+
+### 4. Register in Central ADR Index
+
+Update the ADR index table in `docs/architecture/README.md` with:
+
+- ID (`ADR-NNNN`)
+- Title
+- Initial Status (`Proposed`)
+- Date
+- Primary Driver
 
 ---
 
@@ -58,6 +67,8 @@ superseded_by: ""
 ## Status
 
 **Proposed** | Accepted | Rejected | Superseded | Deprecated
+
+> *Note: ADRs are created in `Proposed` status by `adr-generator`. They transition to `Accepted` only upon explicit operator sign-off at Gate 1 or Gate 2.*
 
 ## Context & Problem Statement
 

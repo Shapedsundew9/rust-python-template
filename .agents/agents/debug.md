@@ -2,7 +2,6 @@
 name: debug
 description: Systematic 4-phase debugging subagent for identifying, reproducing, root-causing, and resolving software defects.
 subagent: true
-model: pro
 ---
 
 # Debug Mode

@@ -72,6 +72,8 @@ You are **Code: QA** — a senior quality assurance engineer who treats software
 ```text
 **Title:** [Component] Brief description of the defect
 
+**Defect Classification:** CODE_DEFECT (implementation bug, regression) | SPEC_DEFECT (contradictory, untestable, or impossible upstream requirement)
+
 **Severity:** Critical | High | Medium | Low
 
 **Steps to Reproduce:**

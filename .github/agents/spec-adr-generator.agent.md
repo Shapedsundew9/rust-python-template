@@ -38,7 +38,17 @@ Before generating an ADR, collect and analyze the following inputs:
 
 ### 3. Generate ADR Document
 
-Create the ADR as a markdown file saved to `docs/architecture/adr-NNNN-[title-slug].md` following the standardized structure below.
+Create the ADR as a markdown file saved to `docs/architecture/adr-NNNN-[title-slug].md` following [`docs/templates/adr-template.md`](../templates/adr-template.md) and the standardized structure below.
+
+### 4. Register in Central ADR Index
+
+Update the ADR index table in `docs/architecture/README.md` with:
+
+- ID (`ADR-NNNN`)
+- Title
+- Initial Status (`Proposed`)
+- Date
+- Primary Driver
 
 ---
 
@@ -145,6 +155,7 @@ Before finalizing the ADR, verify:
 
 - [ ] ADR number is sequential and 4-digit zero-padded (`adr-NNNN-...`).
 - [ ] File is saved in `/docs/architecture/`.
+- [ ] ADR is registered in `/docs/architecture/README.md` with status `Proposed`.
 - [ ] Front matter is complete (title, status, date, tags).
 - [ ] Context clearly explains the forces, constraints, and problem statement.
 - [ ] Decision drivers are explicit and measurable where possible.
