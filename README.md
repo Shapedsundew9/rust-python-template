@@ -387,7 +387,7 @@ The RUG Orchestrator controls automated verification rigor via mode flags:
 
 ## 🔬 Scientific Research Track (`Sci:*`)
 
-The **Scientific Track** coordinates empirical discovery campaigns. Managed by [`Sci: Orchestrator`](.github/agents/sci-orchestrator.agent.md)—now acting as a Lead Scientist that handles strategic direction and iteration decisions—it coordinates 2 substantive subagents to enforce a formal research lifecycle state machine:
+The **Scientific Track** coordinates empirical discovery campaigns. Managed by [`Sci: Orchestrator`](.github/agents/sci-orchestrator.agent.md)—acting as a Lead Scientist that drives goal-oriented empirical discovery, creative ideation, and rapid falsification—it coordinates 2 substantive subagents to enforce a disciplined research lifecycle:
 
 - **Theoretical & Measurement Purity**: Separates mathematical modeling and empirical experiment protocol design (`Sci: Theory & Protocol`) from experiment execution and empirical diagnostics (`Sci: Execution & Analysis`).
 - **Direct Execution Dispatch (1-Level Architecture)**: To eliminate illegal nested-subagent calls (`Sci` $\rightarrow$ `RUG` $\rightarrow$ `SWE`) and avoid burdensome enterprise release ceremonies for exploratory script adjustments, `Sci: Orchestrator` directly dispatches `Sci: Execution & Analysis` within its own 1-level hierarchy.
@@ -395,7 +395,7 @@ The **Scientific Track** coordinates empirical discovery campaigns. Managed by [
 - **Language-Scoped Experiment Isolation**: Every experiment is provisioned as an independent, immutable package under the respective language tree adhering to language identifier rules (lowercase with underscores, e.g. `python/experiments/exp_yyyy_nnna_[slug]/`), strictly preserving historical reproducibility.
 - **Persistent Campaign Continuity & Provenance**: Tracks theoretical capability progression on a complexity ladder across sessions in `docs/research/CAMPAIGN.md`, with every run pinned by cryptographic checksums and Git tags.
 - **Programmatic Telemetry Reduction**: Raw multi-gigabyte telemetry is reduced via scripts to statistical summaries and phase plots before ingestion for analysis.
-- **Human-Gated Discovery Loop**: All macro-level iteration directives (Mutate, Advance, Ablate, Pivot) pass through **Gate I** for operator approval as Principal Investigator before new hypotheses or protocols are dispatched.
+- **Goal-Driven Autonomous Discovery Loop**: Navigates towards ultimate research milestones via iterative hypothesis formulation, fast falsification (the two-strike rule), and mechanistic pivots under an asset-enforced 5-cycle budget in `CAMPAIGN.md`. Decision gates (**Gate H/P** and **Gate I**) execute autonomously unless tripped by genuine multi-path ambiguity, a 2-strike paradigm stall, or budget exhaustion.
 - **Autonomous & Terminal Research Scope**: The research track is self-contained. Its mission terminates not in production software releases, but in rigorous empirical discovery, reproducible experiment packages, execution manifests, and durable diagnostic dossiers.
 
 ### Research Lifecycle & Execution Handoff
@@ -439,8 +439,8 @@ flowchart TD
         THEORY["📐 Sci: Theory & Protocol<br/><i>(Hypotheses & Protocols)</i>"]:::secondary
     end
 
-    subgraph PROTOCOL_GATE["2. Protocol & Budget Decision Gate"]
-        GATE_HP["🔒 Gate H/P: Protocol & Budget Sign-Off<br/><i>(Operator verifies compute & sweep limits)</i>"]:::note
+    subgraph PROTOCOL_GATE["2. Protocol & Budget Check Gate"]
+        GATE_HP["⚡ Gate H/P: Protocol & Budget Check<br/><i>(Autonomous pre-check; escalates if ambiguous)</i>"]:::note
     end
 
     subgraph EXECUTION["3. Execution & Provenance Capture (Direct 1-Level Dispatch)"]
@@ -454,7 +454,7 @@ flowchart TD
 
     subgraph EVALUATION["4. Empirical Diagnostics & Discovery Loop"]
         ORCH_ITER["🎯 Sci: Orchestrator<br/><i>(Strategic Assessment & Iteration Decision)</i>"]:::primary
-        GATE_I["🔒 Gate I: Iteration Decision Gate<br/><i>(Operator signs off on next move)</i>"]:::note
+        GATE_I["⚡ Gate I: Iteration Check Gate<br/><i>(Autonomous loop; escalates on stall or 5-cycle limit)</i>"]:::note
     end
 
     ORCH_ITER -->|"Directs formulation"| THEORY
@@ -462,7 +462,7 @@ flowchart TD
     GATE_HP -->|"Approved"| EXEC
     EXEC -->|"Diagnostic Evaluation Report"| ORCH_ITER
     ORCH_ITER -->|"Iteration Directive"| GATE_I
-    GATE_I -->|"Mutate / Advance / Ablate Approved"| THEORY
+    GATE_I -->|"Mutate / Advance / Ablate / Pivot"| THEORY
     GATE_I -.->|"Milestone Verified"| MILESTONE_DONE["🏁 Research Milestone Complete<br/><i>(Validated Research Dossier & Pinned Tags)</i>"]:::note
 ```
 
