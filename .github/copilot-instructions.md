@@ -17,6 +17,7 @@
 - Import reusable code as `tools`.
 - Do not set or modify `PYTHONPATH`.
 - Declare Python package dependencies in `python/pyproject.toml`.
+- Avoid multiline inline scripts via `python -c` with nested quotes. Write a temporary scratch script to disk instead to prevent escaping errors and shell friction.
 
 ## Services And Secrets
 
