@@ -12,8 +12,8 @@ Save completed run logs to `docs/research/runs/RUN-EXP-YYYY-NNNa-[run-id].md`.
 - **Run Identifier**: RUN-EXP-YYYY-NNNa-[run-id]
 - **Protocol Reference**: `docs/research/protocols/EXP-YYYY-NNNa.md`
 - **Hypothesis Reference**: `docs/research/hypotheses/HYP-YYYY-NNN.md`
-- **Experiment Package**: `python/experiments/EXP-YYYY-NNNa-[slug]/`
-- **Lead Execution Agent**: Code: SWE (Execution Worker) | Manual Operator CLI
+- **Experiment Package**: `python/experiments/exp_yyyy_nnna_[slug]/`
+- **Lead Execution Agent**: Sci: Execution & Analysis | Manual Operator CLI
 - **Date & Duration**: YYYY-MM-DD HH:MM:SS UTC (Duration: [X]h [Y]m [Z]s)
 
 ---
@@ -96,7 +96,7 @@ All emitted telemetry files and their cryptographic checksums:
 
 ## 7. Telemetry Data Reduction Summary
 
-Summary computed programmatically by reduction tool before dispatch to Empirical Diagnostician:
+Summary computed programmatically by reduction tool before diagnostic evaluation:
 
 - Data Reduction Script: `python/scripts/reduce_telemetry.py`
 - Pre-checks: Missing values = 0, NaNs = 0, Corrupted runs = 0
@@ -110,6 +110,6 @@ Summary computed programmatically by reduction tool before dispatch to Empirical
 - [x] Clean working tree verified (`git status --porcelain` is empty, Git Status Dirty is No).
 - [x] Git tag applied: `exp/EXP-YYYY-NNNa-[run-id]`.
 - [x] Telemetry integrity validated and verified non-empty.
-- [x] Telemetry reduced to summary format for Empirical Diagnostician ingestion.
+- [x] Telemetry reduced to summary format for diagnostic evaluation.
 - **Status**: READY FOR DIAGNOSTIC EVALUATION
 ````

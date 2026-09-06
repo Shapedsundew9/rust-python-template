@@ -20,13 +20,11 @@ Save active campaign state to `docs/research/CAMPAIGN.md`.
 
 | Stage | Active Agent | Active Artifact Reference | Status |
 |---|---|---|---|
-| Strategic Direction | Sci: Research Strategist | `docs/research/STRAT-[ID].md` | COMPLETED |
-| Hypothesis Formulation | Sci: Hypothesis Formulator | `docs/research/hypotheses/HYP-[ID].md` | COMPLETED |
-| Protocol Design | Sci: Experiment Protocol Designer | `docs/research/protocols/EXP-[ID].md` | COMPLETED |
-| Protocol & Budget Sign-Off | Operator / User | **Gate H/P**: Sign-off on budget & metrics | APPROVED |
-| Execution & Telemetry | Code Track / Operator | `docs/research/runs/RUN-EXP-[ID].md` | COMPLETED |
-| Diagnostic Analysis | Sci: Empirical Diagnostician | `docs/research/diagnostics/DIAG-[ID].md` | IN PROGRESS |
-| Curriculum Iteration | Sci: Curriculum Director | `docs/research/ITER-[ID].md` | PENDING |
+| Strategic Assessment | Sci: Orchestrator | `docs/research/CAMPAIGN.md`, `DIAG-*.md` (inline directive) | COMPLETED |
+| Theory & Protocol | Sci: Theory & Protocol | `docs/research/hypotheses/HYP-[ID].md`, `docs/research/protocols/EXP-[ID].md` | COMPLETED |
+| Protocol & Budget Sign-Off | Operator / User | **Gate H/P**: Sign-off on hypothesis, protocol & budget | APPROVED |
+| Execution & Analysis | Sci: Execution & Analysis | `python/experiments/`, `docs/research/runs/RUN-EXP-[ID].md`, `docs/research/diagnostics/DIAG-[ID].md` | IN PROGRESS |
+| Iteration Decision | Sci: Orchestrator | Iteration Directive (MUTATE / ADVANCE / ABLATE / EXPLOIT / VERIFY / REFUTE) | PENDING |
 | Iteration Approval | Operator / User | **Gate I**: Sign-off on next action | PENDING |
 
 ---
